@@ -4,6 +4,7 @@ import System.Console.ANSI (setSGRCode,
                             ConsoleLayer(Foreground),
                             ColorIntensity(Dull, Vivid),
                             Color(Blue, Yellow))
+import Codec.Binary.UTF8.String (decodeString)
 
 import Network.HTTP (simpleHTTP, getRequest, getResponseBody)
 
@@ -47,7 +48,7 @@ sideRepr side = concat $ map reprToString repr
       | tag == "b" = bSGR ++ contentsToString subs ++ clearSGR
       | tag == "small" = smallSGR ++ contentsToString subs ++ clearSGR
       | tag == "i" = contentsToString subs
-      | otherwise = "unknown CElem: " ++ tag ++ " - " ++ contentsToString subs
+      | otherwise = "CElem(" ++ tag ++ " " ++ contentsToString subs ++ ")"
     reprToString (CString _ s _) = s
     reprToString (CRef (RefEntity n) _) = "" -- "RefEntity: " ++ n
     reprToString (CRef (RefChar n) _) = "" -- "RefChar: " ++ show n
@@ -62,4 +63,4 @@ main = do
   let document = xmlParse "" queryResult
   let content = docContent (posInNewCxt "" Nothing) document
   let sections = sectionsFilter content
-  putStrLn $ prettySections sections
+  putStrLn . decodeString . prettySections $ sections
