@@ -25,7 +25,7 @@ prettySections :: [Content i] -> String
 prettySections = showEntries . concat . (map parseSection)
   where
     showEntries = foldl (\m entry -> m ++ "\n" ++ showEntry entry) ""
-    showEntry (x, y) = x ++ " : " ++ y
+    showEntry (x, y) = x ++ " --- " ++ y
 
 parseSection :: Content i -> [(String, String)]
 parseSection content = map entryToTuple $ tag "section" /> tag "entry" $ content
@@ -50,8 +50,8 @@ sideRepr side = concat $ map reprToString repr
       | tag == "i" = contentsToString subs
       | otherwise = "CElem(" ++ tag ++ " " ++ contentsToString subs ++ ")"
     reprToString (CString _ s _) = s
-    reprToString (CRef (RefEntity n) _) = "" -- "RefEntity: " ++ n
-    reprToString (CRef (RefChar n) _) = "" -- "RefChar: " ++ show n
+    reprToString (CRef (RefEntity n) _) = ""  -- "RefEntity: " ++ n
+    reprToString (CRef (RefChar n) _) = ""  -- "RefChar: " ++ show n
     reprToString (CMisc _ _) = "Misc"
 
 main :: IO ()
