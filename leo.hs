@@ -63,4 +63,4 @@ main = do
   let document = xmlParse "" queryResult
   let content = docContent (posInNewCxt "" Nothing) document
   let sections = sectionsFilter content
-  putStrLn . decodeString . prettySections $ sections
+  putStrLn . decodeString . prettySections . reverse $ sections
