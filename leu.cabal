@@ -1,0 +1,14 @@
+Name:                leu
+Version:             0.1
+Description:         TODO
+License:             AllRightsReserved
+Author:              Maik Brendler
+Maintainer:          TODO
+Build-Type:          Simple
+Cabal-Version:       >=1.2
+tested-with:         GHC==6.12.1
+
+Executable leu
+  Main-is:           leo.hs
+  Build-Depends:     base >= 3 && < 5, HaXml == 1.23.3, HTTP == 4000.1.1, ansi-terminal == 0.6, utf8-string == 0.3.4
+  ghc-options:        -Wall -O2
