@@ -7,6 +7,7 @@ import System.Console.ANSI (setSGRCode,
 import Codec.Binary.UTF8.String (decodeString)
 
 import Network.HTTP (simpleHTTP, getRequest, getResponseBody)
+import Network.HTTP.Headers
 
 import Text.XML.HaXml.Types (Content(..), Element(Elem), QName(N), Reference(..))
 import Text.XML.HaXml.Parse (xmlParse)
@@ -17,6 +18,7 @@ import Text.XML.HaXml.Posn (posInNewCxt)
 
 buildLeoUrl :: String -> String
 buildLeoUrl searchFor = "http://dict.leo.org/dictQuery/m-vocab/ende/query.xml?tolerMode=nof&lp=ende&lang=de&rmWords=off&rmSearch=on&search=" ++ searchFor ++ "&searchLoc=0&resultOrder=basic&multiwordShowSingle=on"
+--                         http://dict.leo.org/dictQuery/m-vocab/ende/query.xml?tolerMode=nof&lp=ende&lang=de&rmWords=off&rmSearch=on&search="                 "&searchLoc=0&resultOrder=basic&multiwordShowSingle=on
 
 sectionsFilter :: CFilter i
 sectionsFilter = tag "xml" /> tag "part" /> tag "section"
@@ -54,10 +56,16 @@ sideRepr side = concat $ map reprToString repr
     reprToString (CRef (RefChar n) _) = ""  -- "RefChar: " ++ show n
     reprToString (CMisc _ _) = "Misc"
 
+
+-- Maybe I need to get the Cookie by a regular call to dict.leo.org at first!
+--addHeaders :: (Request a) -> (Request a)
+addHeaders r = setHeaders r [Header HdrCookie "LEOABTEST=T; browser=webkit%3B5%3Bajax"]
+
+
 main :: IO ()
 main = do
   searchFor:_ <- getArgs
-  query <- simpleHTTP . getRequest . buildLeoUrl $ searchFor
+  query <- simpleHTTP . addHeaders . getRequest . buildLeoUrl $ searchFor
   queryResult <- getResponseBody query
   -- queryResult <- readFile "test_data/query_for_hello.xml"
   let document = xmlParse "" queryResult
