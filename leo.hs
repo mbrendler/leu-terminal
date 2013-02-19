@@ -1,9 +1,4 @@
 import System.Environment (getArgs)
-import System.Console.ANSI (setSGRCode,
-                            SGR(SetColor),
-                            ConsoleLayer(Foreground),
-                            ColorIntensity(Dull, Vivid),
-                            Color(Blue, Yellow))
 import Codec.Binary.UTF8.String (decodeString)
 
 import Network.HTTP (simpleHTTP, getRequest, getResponseBody, Request)
@@ -14,6 +9,9 @@ import Text.XML.HaXml.Parse (xmlParse)
 import Text.XML.HaXml.Combinators (CFilter, tag, (/>))
 import Text.XML.HaXml.Util (docContent)
 import Text.XML.HaXml.Posn (posInNewCxt)
+
+import TagColoring (clearSGR, tagToSGR)
+
 
 sectionsFilter :: CFilter i
 sectionsFilter = tag "xml" /> tag "part" /> tag "section"
@@ -39,27 +37,13 @@ contentsToString :: [Content i] -> String
 contentsToString = concat . map reprToString
 
 reprToString :: Content i -> String
-reprToString (CElem (Elem (N tagName) _ subs) _) 
-  | tagName == "repr" = contentsToString subs
-  | tagName == "b" = bSGR ++ contentsToString subs ++ clearSGR
-  | tagName == "small" = smallSGR ++ contentsToString subs ++ clearSGR
-  | tagName == "i" = contentsToString subs
-  | otherwise = "Not handled tagName: " ++ tagName ++ " (" ++ contentsToString subs ++ ")"
+reprToString (CElem (Elem (N tagName) _ subs) _) =
+  tagToSGR tagName ++ contentsToString subs ++ clearSGR
 reprToString (CElem (Elem (QN _ _) _ _) _) = "Not handled: QN"
 reprToString (CString _ s _) = s
 reprToString (CRef (RefEntity _) _) = ""  -- "RefEntity: " ++ n
 reprToString (CRef (RefChar _) _) = ""  -- "RefChar: " ++ show n
 reprToString (CMisc _ _) = "Misc"
-
-
-clearSGR :: String
-clearSGR = setSGRCode []
-
-bSGR :: String
-bSGR = setSGRCode [SetColor Foreground Vivid Blue]
-
-smallSGR :: String
-smallSGR = setSGRCode [SetColor Foreground Dull Yellow]
 
 
 buildLeoUrl :: String -> String
