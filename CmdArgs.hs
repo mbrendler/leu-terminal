@@ -1,6 +1,7 @@
 module CmdArgs (
                  parseArguments
                , testFile
+               , reverseOutput
                ) where
 
 import System.Console.ParseArgs (
@@ -11,14 +12,18 @@ import System.Console.ParseArgs (
                                 , ArgsComplete(ArgsTrailing)
                                 , Args
                                 , getArg
+                                , gotArg
                                 )
 
 
 allArguments :: [Arg Int]
-allArguments = [
-  Arg 0 (Just 't') (Just "test-file") (argDataOptional "FILE" ArgtypeString)
-   "work with FILE instead of a HTTP-Request"
-               ]
+allArguments =
+  [
+    Arg 0 (Just 't') (Just "test-file") (argDataOptional "FILE" ArgtypeString)
+        "work with FILE instead of a HTTP-Request"
+  , Arg 1 (Just 'r') (Just "reverse-output") Nothing
+        "reverses the program output"
+  ]
 
 parseArguments :: String -> [String] -> Args Int
 parseArguments = parseArgs (ArgsTrailing "SEARCH") allArguments
@@ -26,3 +31,7 @@ parseArguments = parseArgs (ArgsTrailing "SEARCH") allArguments
 
 testFile :: Args Int -> Maybe String
 testFile args = getArg args 0
+
+
+reverseOutput :: Args Int -> ([a] -> [a])
+reverseOutput args = if gotArg args 1 then id else reverse

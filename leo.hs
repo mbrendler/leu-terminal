@@ -7,7 +7,7 @@ import Network.HTTP.Headers (setHeaders, Header(Header), HeaderName(HdrCookie))
 
 import ParseLeo (xmlStringToParts)
 import PrettyPart (prettyPart)
-import CmdArgs (parseArguments, testFile)
+import CmdArgs (parseArguments, testFile, reverseOutput)
 import System.Console.ParseArgs (argsRest)
 
 
@@ -32,4 +32,4 @@ main = do
 
   let parts = xmlStringToParts queryResult
   -- TODO: filter parts by command line options
-  putStrLn $ decodeString $ unlines $ map prettyPart $ reverse parts
+  putStrLn $ decodeString $ unlines $ map prettyPart $ reverseOutput opts parts
