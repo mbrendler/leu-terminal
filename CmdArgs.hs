@@ -2,6 +2,7 @@ module CmdArgs (
                  parseArguments
                , testFile
                , reverseOutput
+               , argsRest
                ) where
 
 import System.Console.ParseArgs (
@@ -13,6 +14,7 @@ import System.Console.ParseArgs (
                                 , Args
                                 , getArg
                                 , gotArg
+                                , argsRest
                                 )
 
 

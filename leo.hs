@@ -2,12 +2,11 @@ import System.Environment (getArgs, getProgName)
 import Control.Monad (liftM2)
 
 import Codec.Binary.UTF8.String (decodeString)
-import System.Console.ParseArgs (argsRest)
 
+import CmdArgs (parseArguments, argsRest, testFile, reverseOutput)
+import LeoHttpRequest (searchWithHttp)
 import ParseLeo (xmlStringToParts)
 import PrettyPart (prettyPart)
-import CmdArgs (parseArguments, testFile, reverseOutput)
-import LeoHttpRequest (searchWithHttp)
 
 
 main :: IO ()
