@@ -4,34 +4,71 @@ import Codec.Binary.UTF8.String (decodeString)
 import Network.HTTP (simpleHTTP, getRequest, getResponseBody, Request)
 import Network.HTTP.Headers (setHeaders, Header(Header), HeaderName(HdrCookie))
 
-import Text.XML.HaXml.Types (Content(..), Element(..), QName(..), Reference(..))
+import Text.XML.HaXml.Types (Content(..), Element(..), QName(..), Reference(..), AttValue(..))
 import Text.XML.HaXml.Parse (xmlParse)
-import Text.XML.HaXml.Combinators (CFilter, tag, (/>))
-import Text.XML.HaXml.Util (docContent)
+import Text.XML.HaXml.Combinators (tag, (/>))
+import Text.XML.HaXml.Util (docContent, tagTextContent)
 import Text.XML.HaXml.Posn (posInNewCxt)
+import Text.XML.HaXml.Html.Generate (htmlprint)
 
 import TagColoring (clearSGR, tagToSGR)
 
 
-sectionsFilter :: CFilter i
-sectionsFilter = tag "xml" /> tag "part" /> tag "section"
+instance Show (Content i) where
+  show x = show $ htmlprint [x]
 
-prettySections :: [Content i] -> String
-prettySections = showEntries . concat . (map parseSection)
-  where
-    showEntries = foldl (\m entry -> m ++ "\n" ++ showEntry entry) ""
-    showEntry (x, y) = x ++ " --- " ++ y
 
-parseSection :: Content i -> [(String, String)]
-parseSection content = map entryToTuple $ tag "section" /> tag "entry" $ content
+data Translation i = Translation (Content i) (Content i)
+                   | UNSUPPORTED_TRANSLATION String
+                   deriving (Show)
 
-entryToTuple :: Content i -> (String, String)
-entryToTuple entry = (sideRepr side1, sideRepr side2)
-  where (side1:side2:[]) = tag "entry" /> tag "side" $ entry
+data Direct = Direct | Indirect deriving (Show)
 
-sideRepr :: Content i -> String
-sideRepr side = concat $ map reprToString repr
-  where repr = tag "side" /> tag "repr" $ side
+type Title = String
+
+data Part i = Part Direct Title [Translation i]
+            | UNSUPPORTED_PART String
+            deriving (Show)
+
+
+xmlPartsToParts :: [Content i] -> [Part i]
+xmlPartsToParts = concat . (map xmlPartToPart)
+
+xmlPartToPart :: Content i -> [Part i]
+xmlPartToPart (CElem (Elem (N "part") attrs sects) _) = let
+    directFromAttr (AttValue [Left "1"]) = Direct
+    directFromAttr _ = Indirect
+    direct = maybe Indirect (directFromAttr) (lookup (N "direct") attrs)
+    createPart (title, entries) = Part direct title entries
+  in map (createPart . sectionData) sects
+xmlPartToPart x = [UNSUPPORTED_PART $ tagTextContent x]
+
+
+sectionData :: Content i -> (String, [Translation i])
+sectionData (CElem (Elem (N "section") sattrs xmlEntries) _) = let
+    titleFromAttr (Just (AttValue [Left title])) = title
+    titleFromAttr _ = ""
+  in (titleFromAttr $ lookup (N "sctTitle") sattrs,
+      map entryToTranslation xmlEntries)
+sectionData x = ("UNSUPORTED_SECTION: " ++ show x, [])
+
+entryToTranslation :: Content i -> Translation i
+entryToTranslation (CElem (Elem (N "entry") _ (side1:side2:[_info])) _) = let
+    repr side = head $ tag "side" /> tag "repr" $ side
+  in Translation (repr side1) (repr side2)
+entryToTranslation x = UNSUPPORTED_TRANSLATION $ show [x]
+
+
+prettyPart :: Part i -> String
+prettyPart (Part direct section entries) =
+  show direct ++ ": " ++ section ++ "\n" ++ unlines (map prettyEntry entries)
+prettyPart x = show x
+
+
+prettyEntry :: Translation i -> String
+prettyEntry (Translation a b) = reprToString a ++ " --- " ++ reprToString b
+prettyEntry x = show x
+
 
 contentsToString :: [Content i] -> String
 contentsToString = concat . map reprToString
@@ -62,5 +99,7 @@ main = do
   -- queryResult <- readFile "test_data/query_for_hello.xml"
   let document = xmlParse "" queryResult
   let content = docContent (posInNewCxt "" Nothing) document
-  let sections = sectionsFilter content
-  putStrLn . decodeString . prettySections . reverse $ sections
+  let xmlParts = tag "xml" /> tag "part" $ content
+  let parts = xmlPartsToParts xmlParts
+  -- TODO: filter parts by command line options
+  putStrLn $ decodeString $ unlines $ map prettyPart parts
