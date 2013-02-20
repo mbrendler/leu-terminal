@@ -16,8 +16,8 @@ import System.Console.ParseArgs (
 
 allArguments :: [Arg Int]
 allArguments = [
-  (Arg 0 (Just 't') (Just "test-file") (argDataOptional "FILE" ArgtypeString)
-   "work with FILE instead of a HTTP-Request")
+  Arg 0 (Just 't') (Just "test-file") (argDataOptional "FILE" ArgtypeString)
+   "work with FILE instead of a HTTP-Request"
                ]
 
 parseArguments :: String -> [String] -> Args Int

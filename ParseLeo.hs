@@ -43,13 +43,13 @@ queryXmlParts :: Content i -> [Content i]
 queryXmlParts = tag "xml" /> tag "part"
 
 xmlPartsToParts :: [Content i] -> [Part i]
-xmlPartsToParts = concat . (map xmlPartToPart)
+xmlPartsToParts = concatMap xmlPartToPart
 
 xmlPartToPart :: Content i -> [Part i]
 xmlPartToPart (CElem (Elem (N "part") attrs sects) _) = let
     directFromAttr (AttValue [Left "1"]) = Direct
     directFromAttr _ = Indirect
-    direct = maybe Indirect (directFromAttr) (lookup (N "direct") attrs)
+    direct = maybe Indirect directFromAttr (lookup (N "direct") attrs)
     createPart (title, entries) = Part direct title entries
   in map (createPart . sectionData) sects
 xmlPartToPart x = [UNSUPPORTED_PART $ show x]

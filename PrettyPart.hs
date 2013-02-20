@@ -20,7 +20,7 @@ prettyEntry (Translation a b) = reprToString a ++ " --- " ++ reprToString b
 prettyEntry x = show x
 
 contentsToString :: [Content i] -> String
-contentsToString = concat . map reprToString
+contentsToString = concatMap reprToString
 
 reprToString :: Content i -> String
 reprToString (CElem (Elem (N tagName) _ subs) _) =
