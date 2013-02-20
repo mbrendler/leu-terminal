@@ -35,5 +35,5 @@ testFile :: Args Int -> Maybe String
 testFile args = getArg args 0
 
 
-reverseOutput :: Args Int -> ([a] -> [a])
+reverseOutput :: Args Int -> [a] -> [a]
 reverseOutput args = if gotArg args 1 then id else reverse
