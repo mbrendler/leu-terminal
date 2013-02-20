@@ -27,7 +27,6 @@ main :: IO ()
 main = do
   opts <- liftM2 parseArguments getProgName getArgs
   
-  -- searchFor:_ <- getArgs -- TODO: get by option parser
   let searchFor = unwords $ argsRest opts
   queryResult <- maybe (searchWithHttp searchFor) readFile (testFile opts)
 
