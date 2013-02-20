@@ -24,4 +24,4 @@ main = do
   -- queryResult <- readFile "test_data/query_for_hello.xml"
   let parts = xmlStringToParts queryResult
   -- TODO: filter parts by command line options
-  putStrLn $ decodeString $ unlines $ map prettyPart parts
+  putStrLn $ decodeString $ unlines $ map prettyPart $ reverse parts
