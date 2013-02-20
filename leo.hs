@@ -8,6 +8,7 @@ import Network.HTTP.Headers (setHeaders, Header(Header), HeaderName(HdrCookie))
 import ParseLeo (xmlStringToParts)
 import PrettyPart (prettyPart)
 import CmdArgs (parseArguments, testFile)
+import System.Console.ParseArgs (argsRest)
 
 
 buildLeoUrl :: String -> String
@@ -26,7 +27,8 @@ main :: IO ()
 main = do
   opts <- liftM2 parseArguments getProgName getArgs
   
-  searchFor:_ <- getArgs -- TODO: get by option parser
+  -- searchFor:_ <- getArgs -- TODO: get by option parser
+  let searchFor = unwords $ argsRest opts
   queryResult <- maybe (searchWithHttp searchFor) readFile (testFile opts)
 
   let parts = xmlStringToParts queryResult

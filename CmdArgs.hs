@@ -21,7 +21,7 @@ allArguments = [
                ]
 
 parseArguments :: String -> [String] -> Args Int
-parseArguments = parseArgs (ArgsTrailing "extra") allArguments
+parseArguments = parseArgs (ArgsTrailing "SEARCH") allArguments
 
 
 testFile :: Args Int -> Maybe String
