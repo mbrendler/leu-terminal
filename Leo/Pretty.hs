@@ -1,4 +1,4 @@
-module PrettyPart (prettyPart) where
+module Leo.Pretty (prettyPart) where
 
 import Text.XML.HaXml.Types (Content(..), Element(..), QName(..), Reference(..))
 import System.Console.ANSI (setSGRCode,
@@ -7,7 +7,7 @@ import System.Console.ANSI (setSGRCode,
                             ColorIntensity(Dull, Vivid),
                             Color(Blue, Yellow, White))
 
-import ParseLeo (Part(Part), Translation(Translation))
+import Leo.Parse (Part(Part), Translation(Translation))
 
 
 prettyPart :: Part i -> String

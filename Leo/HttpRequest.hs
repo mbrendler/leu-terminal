@@ -1,4 +1,4 @@
-module LeoHttpRequest (searchWithHttp) where
+module Leo.HttpRequest (searchWithHttp) where
 
 import Network.HTTP (simpleHTTP, getRequest, getResponseBody, Request)
 import Network.HTTP.Headers (setHeaders, Header(Header), HeaderName(HdrCookie))

@@ -1,4 +1,4 @@
-module ParseLeo (
+module Leo.Parse (
     xmlStringToParts
   , parseXmlToContent
   , queryXmlParts

@@ -5,9 +5,9 @@ import Codec.Binary.UTF8.String (decodeString)
 
 import CmdArgs (parseArguments, argsRest, testFile, reverseOutput,
                 OutputFormat(..), outputFormat)
-import LeoHttpRequest (searchWithHttp)
-import ParseLeo (xmlStringToParts, PartsModifier)
-import PrettyPart (prettyPart)
+import Leo.HttpRequest (searchWithHttp)
+import Leo.Parse (xmlStringToParts, PartsModifier)
+import Leo.Pretty (prettyPart)
 
 
 putLines :: [String] -> IO ()
