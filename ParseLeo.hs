@@ -4,6 +4,7 @@ module ParseLeo (
   , queryXmlParts
   , xmlPartsToParts
   , Part(..)
+  , PartsModifier
   , Translation(..)
   ) where
 
@@ -30,6 +31,8 @@ type Title = String
 data Part i = Part Direct Title [Translation i]
             | UNSUPPORTED_PART String
             deriving (Show)
+
+type PartsModifier = [Part Posn] -> [Part Posn]
 
 
 xmlStringToParts :: String -> [Part Posn]

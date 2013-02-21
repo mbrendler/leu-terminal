@@ -3,6 +3,8 @@ module CmdArgs (
                , testFile
                , reverseOutput
                , argsRest
+               , OutputFormat(..)
+               , outputFormat
                ) where
 
 import System.Console.ParseArgs (
@@ -18,6 +20,9 @@ import System.Console.ParseArgs (
                                 )
 
 
+data OutputFormat = Pretty | Xml deriving (Show)
+
+
 allArguments :: [Arg Int]
 allArguments =
   [
@@ -25,6 +30,8 @@ allArguments =
         "work with FILE instead of a HTTP-Request"
   , Arg 1 (Just 'r') (Just "reverse-output") Nothing
         "reverses the program output"
+  , Arg 2 (Just 'x') (Just "show-xml-response") Nothing
+        "show XML response instead of parsed Translations"
   ]
 
 parseArguments :: String -> [String] -> Args Int
@@ -37,3 +44,7 @@ testFile args = getArg args 0
 
 reverseOutput :: Args Int -> [a] -> [a]
 reverseOutput args = if gotArg args 1 then id else reverse
+
+
+outputFormat :: Args Int -> OutputFormat
+outputFormat args = if gotArg args 2 then Xml else Pretty
