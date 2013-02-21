@@ -8,16 +8,16 @@ module CmdArgs (
   ) where
 
 import System.Console.ParseArgs (
-                                  Arg(Arg)
-                                , Argtype(..)
-                                , argDataOptional
-                                , parseArgs
-                                , ArgsComplete(ArgsTrailing)
-                                , Args
-                                , getArg
-                                , gotArg
-                                , argsRest
-                                )
+    Arg(Arg)
+  , Argtype(..)
+  , argDataOptional
+  , parseArgs
+  , ArgsComplete(ArgsTrailing)
+  , Args
+  , getArg
+  , gotArg
+  , argsRest
+  )
 
 
 data OutputFormat = Pretty | Xml deriving (Show)
