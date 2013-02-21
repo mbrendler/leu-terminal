@@ -11,7 +11,7 @@ import Leo.Pretty (prettyPart)
 
 
 putLines :: [String] -> IO ()
-putLines = putStrLn . decodeString . unlines
+putLines = putStr . decodeString . unlines
 
 
 getOutputLines :: OutputFormat -> String -> [String]
