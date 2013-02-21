@@ -7,7 +7,7 @@ import System.Console.ANSI (setSGRCode,
                             ColorIntensity(Dull, Vivid),
                             Color(Blue, Yellow, White))
 
-import Leo.Parse (Part(Part), Translation(Translation))
+import Leo.Types (Part(Part), Translation(Translation))
 
 
 prettyPart :: Part i -> String

@@ -3,9 +3,6 @@ module Leo.Parse (
   , parseXmlToContent
   , queryXmlParts
   , xmlPartsToParts
-  , Part(..)
-  , PartsModifier
-  , Translation(..)
   ) where
 
 import Text.XML.HaXml.Parse (xmlParse)
@@ -13,26 +10,8 @@ import Text.XML.HaXml.Util (docContent)
 import Text.XML.HaXml.Posn (posInNewCxt, Posn)
 import Text.XML.HaXml.Types (Content(..), Element(..), QName(..), AttValue(..))
 import Text.XML.HaXml.Combinators (tag, (/>))
-import Text.XML.HaXml.Html.Generate (htmlprint)
 
-
-instance Show (Content i) where
-  show x = show $ htmlprint [x]
-
-
-data Translation i = Translation (Content i) (Content i)
-                   | UNSUPPORTED_TRANSLATION String
-                   deriving (Show)
-
-data Direct = Direct | Indirect deriving (Show)
-
-type Title = String
-
-data Part i = Part Direct Title [Translation i]
-            | UNSUPPORTED_PART String
-            deriving (Show)
-
-type PartsModifier = [Part Posn] -> [Part Posn]
+import Leo.Types (Part(..), Direct(..), Translation(..))
 
 
 xmlStringToParts :: String -> [Part Posn]
