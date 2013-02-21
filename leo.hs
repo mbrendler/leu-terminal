@@ -31,5 +31,4 @@ main = do
   let searchFor = unwords $ argsRest opts
   queryResult <- maybe (searchWithHttp searchFor) readFile (testFile opts)
 
-  -- TODO: extend part filtering by command line options
   putLines $ getOutputLines (outputFormat opts) queryResult
