@@ -1,11 +1,11 @@
 module CmdArgs (
-                 parseArguments
-               , testFile
-               , reverseOutput
-               , argsRest
-               , OutputFormat(..)
-               , outputFormat
-               ) where
+    parseArguments
+  , testFile
+  , reverseOutput
+  , argsRest
+  , OutputFormat(..)
+  , outputFormat
+  ) where
 
 import System.Console.ParseArgs (
                                   Arg(Arg)
