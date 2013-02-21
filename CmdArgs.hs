@@ -27,8 +27,7 @@ data ArgumentKeys = File | Reverse | XmlOut deriving (Show, Ord, Eq)
 allArguments :: [Arg ArgumentKeys]
 allArguments =
   [
-    Arg File (Just 't') (Just "test-file")
-        (argDataOptional "FILE" ArgtypeString)
+    Arg File (Just 'f') (Just "file") (argDataOptional "FILE" ArgtypeString)
         "work with FILE instead of a HTTP-Request"
   , Arg Reverse (Just 'r') (Just "reverse-output") Nothing
         "reverses the program output"
