@@ -21,5 +21,7 @@ main = do
   queryResult <- maybe (searchWithHttp searchFor) readFile (testFile opts)
 
   let parts = xmlStringToParts queryResult
-  -- TODO: filter parts by command line options
-  putLines $ map prettyPart $ reverseOutput opts parts
+  if null parts
+    then putStrLn $ "No translation found for " ++ searchFor ++ "."
+    -- TODO: filter parts by command line options
+    else putLines $ map prettyPart $ reverseOutput opts parts
