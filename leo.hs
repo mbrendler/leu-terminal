@@ -9,6 +9,10 @@ import ParseLeo (xmlStringToParts)
 import PrettyPart (prettyPart)
 
 
+putLines :: [String] -> IO ()
+putLines = putStrLn . decodeString . unlines
+
+
 main :: IO ()
 main = do
   opts <- liftM2 parseArguments getProgName getArgs
@@ -18,5 +22,4 @@ main = do
 
   let parts = xmlStringToParts queryResult
   -- TODO: filter parts by command line options
-  -- TODO: check if decodeString is really needed
-  putStrLn . decodeString . unlines $ map prettyPart $ reverseOutput opts parts
+  putLines $ map prettyPart $ reverseOutput opts parts
