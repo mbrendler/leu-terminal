@@ -6,7 +6,8 @@ import Codec.Binary.UTF8.String (decodeString)
 import CmdArgs (parseArguments, argsRest, testFile, reverseOutput,
                 OutputFormat(..), outputFormat)
 import Leo.HttpRequest (searchWithHttp)
-import Leo.Parse (xmlStringToParts, PartsModifier)
+import Leo.Types (PartsModifier)
+import Leo.Parse (xmlStringToParts)
 import Leo.Pretty (prettyPart)
 
 
