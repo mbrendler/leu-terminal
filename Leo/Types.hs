@@ -1,12 +1,10 @@
 module Leo.Types (
     Part(..)
-  , PartsModifier
   , Translation(..)
   , Direct(..)
   ) where
 
 import Text.XML.HaXml.Types (Content)
-import Text.XML.HaXml.Posn (Posn)
 import Text.XML.HaXml.Html.Generate (htmlprint)
 
 
@@ -25,5 +23,3 @@ type Title = String
 data Part i = Part Direct Title [Translation i]
             | UNSUPPORTED_PART String
             deriving (Show)
-
-type PartsModifier = [Part Posn] -> [Part Posn]

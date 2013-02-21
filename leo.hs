@@ -3,10 +3,9 @@ import Control.Monad (liftM2)
 
 import Codec.Binary.UTF8.String (decodeString)
 
-import CmdArgs (parseArguments, argsRest, testFile, reverseOutput,
-                OutputFormat(..), outputFormat)
+import CmdArgs (parseArguments, argsRest, testFile, OutputFormat(..),
+                outputFormat)
 import Leo.HttpRequest (searchWithHttp)
-import Leo.Types (PartsModifier)
 import Leo.Parse (xmlStringToParts)
 import Leo.Pretty (prettyPart)
 
@@ -15,14 +14,14 @@ putLines :: [String] -> IO ()
 putLines = putStrLn . decodeString . unlines
 
 
-getOutputLines :: OutputFormat -> PartsModifier -> String -> [String]
-getOutputLines Xml _ queryResult = [queryResult]
-getOutputLines Pretty partsModifier queryResult =
+getOutputLines :: OutputFormat -> String -> [String]
+getOutputLines Xml queryResult = [queryResult]
+getOutputLines Pretty queryResult =
   let parts = xmlStringToParts queryResult
     in if null parts
        then ["No translation found.",
              "Use '-x' to show the XML response."]
-       else map prettyPart $ partsModifier parts
+       else map prettyPart $ reverse parts
 
 
 main :: IO ()
@@ -33,4 +32,4 @@ main = do
   queryResult <- maybe (searchWithHttp searchFor) readFile (testFile opts)
 
   -- TODO: extend part filtering by command line options
-  putLines $ getOutputLines (outputFormat opts) (reverseOutput opts) queryResult
+  putLines $ getOutputLines (outputFormat opts) queryResult
