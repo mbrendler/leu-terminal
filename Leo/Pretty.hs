@@ -11,8 +11,10 @@ import Leo.Types (Part(Part), Translation(Translation))
 
 
 prettyPart :: Part i -> String
-prettyPart (Part direct section entries) =
-  show direct ++ ": " ++ section ++ "\n" ++ unlines (map prettyEntry entries)
+prettyPart (Part direct section entries) = heading ++ "\n" ++ content
+  where
+    heading = show direct ++ ": " ++ section
+    content = unlines $ map prettyEntry $ reverse entries
 prettyPart x = show x
 
 prettyEntry :: Translation i -> String
