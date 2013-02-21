@@ -5,7 +5,7 @@ import System.Console.ANSI (setSGRCode,
                             SGR(SetColor),
                             ConsoleLayer(Foreground),
                             ColorIntensity(Dull, Vivid),
-                            Color(Blue, Yellow))
+                            Color(Blue, Yellow, White))
 
 import ParseLeo (Part(Part), Translation(Translation))
 
@@ -40,6 +40,7 @@ clearSGR = setSGRCode []
 tagToSGR :: String -> String
 tagToSGR "b" = setSGRCode [SetColor Foreground Vivid Blue]
 tagToSGR "small" = setSGRCode [SetColor Foreground Dull Yellow]
+tagToSGR "sup" = setSGRCode [SetColor Foreground Dull White]
 tagToSGR "i" = ""
 tagToSGR "repr" = ""
 tagToSGR x = "UNHANDLED TAGNAME (" ++ x ++ ")"
