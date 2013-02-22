@@ -18,7 +18,7 @@ prettyPart (Part direct section entries) = heading ++ "\n" ++ content
 prettyPart x = show x
 
 prettyEntry :: Translation i -> String
-prettyEntry (Translation a b) = reprToString a ++ " --- " ++ reprToString b
+prettyEntry (Translation a b) = reprToString a ++ " -- " ++ reprToString b
 prettyEntry x = show x
 
 contentsToString :: [Content i] -> String
