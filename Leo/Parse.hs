@@ -11,7 +11,7 @@ import Text.XML.HaXml.Posn (posInNewCxt, Posn)
 import Text.XML.HaXml.Types (Content(..), Element(..), QName(..), AttValue(..))
 import Text.XML.HaXml.Combinators (tag, (/>))
 
-import Leo.Types (Part(..), Direct(..), Translation(..))
+import Leo.Types (Part(..), Direct(..), Translation(..), showContent)
 
 
 xmlStringToParts :: String -> [Part Posn]
@@ -34,7 +34,7 @@ xmlPartToPart (CElem (Elem (N "part") attrs sects) _) = let
     direct = maybe Indirect directFromAttr (lookup (N "direct") attrs)
     createPart (title, entries) = Part direct title entries
   in map (createPart . sectionData) sects
-xmlPartToPart x = [UNSUPPORTED_PART $ show x]
+xmlPartToPart x = [UNSUPPORTED_PART $ showContent x]
 
 sectionData :: Content i -> (String, [Translation i])
 sectionData (CElem (Elem (N "section") sattrs xmlEntries) _) = let
@@ -42,10 +42,10 @@ sectionData (CElem (Elem (N "section") sattrs xmlEntries) _) = let
     titleFromAttr _ = ""
   in (titleFromAttr $ lookup (N "sctTitle") sattrs,
       map entryToTranslation xmlEntries)
-sectionData x = ("UNSUPORTED_SECTION: " ++ show x, [])
+sectionData x = ("UNSUPORTED_SECTION: " ++ showContent x, [])
 
 entryToTranslation :: Content i -> Translation i
 entryToTranslation (CElem (Elem (N "entry") _ (side1:side2:[_info])) _) = let
     repr side = head $ tag "side" /> tag "repr" $ side
   in Translation (repr side1) (repr side2)
-entryToTranslation x = UNSUPPORTED_TRANSLATION $ show [x]
+entryToTranslation x = UNSUPPORTED_TRANSLATION $ showContent x

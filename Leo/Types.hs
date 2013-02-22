@@ -2,19 +2,26 @@ module Leo.Types (
     Part(..)
   , Translation(..)
   , Direct(..)
+  , showContent
   ) where
 
 import Text.XML.HaXml.Types (Content)
 import Text.XML.HaXml.Html.Generate (htmlprint)
 
 
-instance Show (Content i) where
-  show x = show $ htmlprint [x]
+showContent :: Content i -> String
+showContent = show . htmlprint . (:[])
 
 
 data Translation i = Translation (Content i) (Content i)
                    | UNSUPPORTED_TRANSLATION String
-                   deriving (Show)
+
+instance Show (Translation i) where
+  show (Translation x y) = "Translation " ++
+                           showContent x ++ " " ++
+                           showContent y
+  show (UNSUPPORTED_TRANSLATION x) = "UNSUPPORTED_TRANSLATION " ++ x
+
 
 data Direct = Direct | Indirect deriving (Show)
 
