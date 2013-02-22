@@ -9,7 +9,9 @@ buildLeoUrl searchFor = "http://dict.leo.org/dictQuery/m-vocab/ende/query.xml?to
 
 -- Maybe I need to get the Cookie by a regular call to dict.leo.org at first!
 addHeaders :: Request a -> Request a
-addHeaders r = setHeaders r [Header HdrCookie "LEOABTEST=T; browser=webkit%3B5%3Bajax"]
+addHeaders r = setHeaders r [
+    Header HdrCookie "LEOABTEST=T; browser=webkit%3B5%3Bajax"
+  ]
 
 searchWithHttp :: String -> IO String
 searchWithHttp search = httpRequest search >>= getResponseBody
