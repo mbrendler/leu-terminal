@@ -25,9 +25,8 @@ textLength :: String -> Int
 textLength = length . stripSGR
 
 prettyEntry :: Int -> Translation i -> String
-prettyEntry textWidth (Translation l r) = if textLength simpleLine <= textWidth
-                                then simpleLine
-                                else multiLine
+prettyEntry textWidth (Translation l r) =
+  if textLength simpleLine <= textWidth then simpleLine else multiLine
   where
     left = reprToString l
     sep = " -- "
