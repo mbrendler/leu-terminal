@@ -5,6 +5,7 @@ import Codec.Binary.UTF8.String (decodeString)
 
 import CmdArgs (parseArguments, argsRest, testFile, OutputFormat(..),
                 outputFormat)
+import TermSize (getTermSize)
 import Leo.HttpRequest (searchWithHttp)
 import Leo.Parse (xmlStringToParts)
 import Leo.Pretty (prettyPart)
@@ -14,14 +15,14 @@ putLines :: [String] -> IO ()
 putLines = putStr . decodeString . unlines
 
 
-getOutputLines :: OutputFormat -> String -> [String]
-getOutputLines Xml queryResult = [queryResult]
-getOutputLines Pretty queryResult =
+getOutputLines :: Int -> OutputFormat -> String -> [String]
+getOutputLines _ Xml queryResult = [queryResult]
+getOutputLines termWidth Pretty queryResult =
   let parts = xmlStringToParts queryResult
     in if null parts
        then ["No translation found.",
              "Use '-x' to show the XML response."]
-       else map prettyPart $ reverse parts
+       else map (prettyPart termWidth) $ reverse parts
 
 
 main :: IO ()
@@ -31,4 +32,5 @@ main = do
   let searchFor = unwords $ argsRest opts
   queryResult <- maybe (searchWithHttp searchFor) readFile (testFile opts)
 
-  putLines $ getOutputLines (outputFormat opts) queryResult
+  (_, termWidth) <- getTermSize
+  putLines $ getOutputLines termWidth (outputFormat opts) queryResult
