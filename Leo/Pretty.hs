@@ -63,6 +63,7 @@ tagToSGR "small" = colorCodeYellow
 tagToSGR "sup" = colorCodeWhite
 tagToSGR "i" = ""
 tagToSGR "repr" = ""
+tagToSGR "br" = ""
 tagToSGR x = "UNHANDLED TAGNAME (" ++ x ++ ")"
 
 colorCodeBlue :: String
