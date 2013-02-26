@@ -9,9 +9,14 @@ import Text.XML.HaXml.Parse (xmlParse)
 import Text.XML.HaXml.Util (docContent)
 import Text.XML.HaXml.Posn (posInNewCxt, Posn)
 import Text.XML.HaXml.Types (Content(..), Element(..), QName(..), AttValue(..))
-import Text.XML.HaXml.Combinators (tag, (/>))
+import Text.XML.HaXml.Combinators (tag, (/>), txt, elm)
 
-import Leo.Types (Part(..), Direct(..), Translation(..), showContent)
+import Leo.Types (
+    Part(..)
+  , Direct(..)
+  , Translation(..)
+  , showContent
+  )
 
 
 xmlStringToParts :: String -> [Part Posn]
@@ -22,7 +27,7 @@ parseXmlToContent xmlStr =
   docContent (posInNewCxt "" Nothing) (xmlParse "" xmlStr)
 
 queryXmlParts :: Content i -> [Content i]
-queryXmlParts = tag "xml" /> tag "part"
+queryXmlParts = tag "xml" /> elm
 
 xmlPartsToParts :: [Content i] -> [Part i]
 xmlPartsToParts = concatMap xmlPartToPart
@@ -33,7 +38,18 @@ xmlPartToPart (CElem (Elem (N "part") attrs sects) _) = let
     directFromAttr _ = Indirect
     direct = maybe Indirect directFromAttr (lookup (N "direct") attrs)
     createPart (title, entries) = Part direct title entries
-  in map (createPart . sectionData) sects
+  in map (createPart . sectionData) $ sects
+xmlPartToPart (CElem (Elem (N "similar") _ sides) _) = let
+    getWords = tag "side" /> tag "word" /> txt
+    partByWord w = PartSimilar (showContent w) "todo"
+    processSide x = map partByWord $ getWords x
+  in concatMap processSide sides
+xmlPartToPart (CElem (Elem (N "advMedia") _ _) _) = []
+xmlPartToPart (CElem (Elem (N "search") _ _) _) = []
+xmlPartToPart (CElem (Elem (N "forum") _ _) _) = []
+xmlPartToPart (CElem (Elem (N "baseform") _ _) _) = []
+xmlPartToPart (CElem (Elem (N "forumRef") _ _) _) = []
+xmlPartToPart (CElem (Elem (N "servicedata") _ _) _) = []
 xmlPartToPart x = [UNSUPPORTED_PART $ showContent x]
 
 sectionData :: Content i -> (String, [Translation i])

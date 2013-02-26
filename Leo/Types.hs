@@ -26,7 +26,10 @@ instance Show (Translation i) where
 data Direct = Direct | Indirect deriving (Show)
 
 type Title = String
+type Word = String
+type Language = String
 
 data Part i = Part Direct Title [Translation i]
+            | PartSimilar Word Language
             | UNSUPPORTED_PART String
             deriving (Show)
