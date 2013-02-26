@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml leorendertarget="1" dictQueryXSLT="0">
+  <advMedia url=""/>
+  <search original="promiss" normalized="promiss" where="0" lp="ende" lang="de" hitcount="0"/>
+<part direct="1" count="0" title="Unmittelbare Treffer">
+</part>
+<part direct="0" count="0" title="Weitere Treffer">
+</part>
+<similar>
+<side lang="en">
+<word>premiss</word><word>promise</word><word>promisee</word></side><side lang="de"><word>promisk</word>
+</side>
+</similar>
+
+<forum></forum><baseform><side lang="en"></side><side lang="de"></side></baseform><forumRef count="0"></forumRef><forum></forum><servicedata entries="788.350" queries="4.574.636" hostName="leomuc2" timeUsed="310" login="false"/></xml>
