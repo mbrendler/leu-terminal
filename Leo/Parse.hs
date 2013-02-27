@@ -6,7 +6,7 @@ module Leo.Parse (
   ) where
 
 import Text.XML.HaXml.Parse (xmlParse)
-import Text.XML.HaXml.Util (docContent)
+import Text.XML.HaXml.Util (docContent, contentElem, attrs)
 import Text.XML.HaXml.Posn (posInNewCxt, Posn)
 import Text.XML.HaXml.Types (Content(..), Element(..), QName(..), AttValue(..))
 import Text.XML.HaXml.Combinators (tag, (/>), txt, elm)
@@ -33,16 +33,20 @@ xmlPartsToParts :: [Content i] -> [Part i]
 xmlPartsToParts = concatMap xmlPartToPart
 
 xmlPartToPart :: Content i -> [Part i]
-xmlPartToPart (CElem (Elem (N "part") attrs sects) _) = let
+xmlPartToPart (CElem (Elem (N "part") attributes sects) _) = let
     directFromAttr (AttValue [Left "1"]) = Direct
     directFromAttr _ = Indirect
-    direct = maybe Indirect directFromAttr (lookup (N "direct") attrs)
+    direct = maybe Indirect directFromAttr (lookup (N "direct") attributes)
     createPart (title, entries) = Part direct title entries
   in map (createPart . sectionData) $ sects
 xmlPartToPart (CElem (Elem (N "similar") _ sides) _) = let
     getWords = tag "side" /> tag "word" /> txt
-    partByWord w = PartSimilar (showContent w) "todo"
-    processSide x = map partByWord $ getWords x
+    partByWord l w = PartSimilar (showContent w) l
+    processSide x = map (partByWord langStr) $ getWords x
+      where
+        attributes = attrs $ contentElem x
+        lang = head $ filter ((== (N "lang")) . fst) attributes
+        langStr = show $ snd $ lang
   in concatMap processSide sides
 xmlPartToPart (CElem (Elem (N "advMedia") _ _) _) = []
 xmlPartToPart (CElem (Elem (N "search") _ _) _) = []
