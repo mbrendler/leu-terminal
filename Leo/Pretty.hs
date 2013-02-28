@@ -6,9 +6,9 @@ import System.Console.ANSI (setSGRCode,
                             SGR(SetColor),
                             ConsoleLayer(Foreground),
                             ColorIntensity(Dull, Vivid),
-                            Color(Blue, Yellow, White))
+                            Color(Blue, Yellow, White, Red))
 
-import Leo.Types (Part(Part), Translation(Translation))
+import Leo.Types (Part(Part, PartSimilar), Translation(Translation))
 
 
 prettyPart :: Int -> Part i -> String
@@ -16,6 +16,8 @@ prettyPart width (Part direct section entries) = heading ++ "\n" ++ content
   where
     heading = show direct ++ ": " ++ section
     content = unlines $ map (prettyEntry width) $ reverse entries
+prettyPart _ (PartSimilar word language) =
+  colorCodeRed ++ word ++ colorCodeWhite ++ "(" ++ language ++ ")" ++ clearSGR
 prettyPart _ x = show x
 
 stripSGR :: String -> String
@@ -72,6 +74,9 @@ colorCodeYellow :: String
 colorCodeYellow = setSGRCode [SetColor Foreground Dull Yellow]
 colorCodeWhite :: String
 colorCodeWhite = setSGRCode [SetColor Foreground Dull White]
+colorCodeRed :: String
+colorCodeRed = setSGRCode [SetColor Foreground Dull Red]
 
 allSGRCodes :: [String]
-allSGRCodes = [clearSGR, colorCodeBlue, colorCodeYellow, colorCodeWhite]
+allSGRCodes = [clearSGR, colorCodeBlue, colorCodeYellow, colorCodeWhite,
+               colorCodeRed]
