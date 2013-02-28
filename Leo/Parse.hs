@@ -47,10 +47,10 @@ xmlPartToPart x = [UNSUPPORTED_PART $ showContent x]
 
 sectionData :: Content i -> (String, [Translation i])
 sectionData (CElem (Elem (N "section") sattrs xmlEntries) _) = let
-    titleFromAttr (Just (AttValue [Left title])) = title
-    titleFromAttr _ = ""
-  in (titleFromAttr $ lookup (N "sctTitle") sattrs,
-      map entryToTranslation xmlEntries)
+    defaultTitle = AttValue [Left ""]
+    sectionTitle = fromMaybe defaultTitle (lookup (N "sctTitle") sattrs)
+    translations = map entryToTranslation xmlEntries
+  in (show sectionTitle, translations)
 sectionData x = ("UNSUPORTED_SECTION: " ++ showContent x, [])
 
 entryToTranslation :: Content i -> Translation i
