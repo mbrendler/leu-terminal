@@ -39,15 +39,7 @@ xmlPartToPart (CElem (Elem (N "part") attributes sects) _) = let
     direct = maybe Indirect directFromAttr (lookup (N "direct") attributes)
     createPart (title, entries) = Part direct title entries
   in map (createPart . sectionData) $ sects
-xmlPartToPart (CElem (Elem (N "similar") _ sides) _) = let
-    getWords = tag "side" /> tag "word" /> txt
-    partByWord l w = PartSimilar (showContent w) l
-    processSide x = map (partByWord langStr) $ getWords x
-      where
-        attributes = attrs $ contentElem x
-        lang = head $ filter ((== (N "lang")) . fst) attributes
-        langStr = show $ snd $ lang
-  in concatMap processSide sides
+xmlPartToPart (CElem (Elem (N "similar") _ sides) _) = map partSimilar sides
 xmlPartToPart (CElem (Elem (N "advMedia") _ _) _) = []
 xmlPartToPart (CElem (Elem (N "search") _ _) _) = []
 xmlPartToPart (CElem (Elem (N "forum") _ _) _) = []
@@ -69,3 +61,12 @@ entryToTranslation (CElem (Elem (N "entry") _ (side1:side2:[_info])) _) = let
     repr side = head $ tag "side" /> tag "repr" $ side
   in Translation (repr side1) (repr side2)
 entryToTranslation x = UNSUPPORTED_TRANSLATION $ showContent x
+
+
+partSimilar :: Content i -> Part i
+partSimilar xmlSide = PartSimilar (getWordStrings xmlSide) (show lang)
+  where
+    getWordsContents = tag "side" /> tag "word" /> txt
+    getWordStrings = map showContent . getWordsContents
+    attributes = attrs $ contentElem xmlSide
+    lang = snd $ head $ filter ((== (N "lang")) . fst) attributes

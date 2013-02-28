@@ -30,6 +30,6 @@ type Word = String
 type Language = String
 
 data Part i = Part Direct Title [Translation i]
-            | PartSimilar Word Language
+            | PartSimilar [Word] Language
             | UNSUPPORTED_PART String
             deriving (Show)

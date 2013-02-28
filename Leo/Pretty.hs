@@ -1,5 +1,7 @@
 module Leo.Pretty (prettyPart) where
 
+import Data.List (intersperse)
+
 import Text.XML.HaXml.Types (Content(..), Element(..), QName(..), Reference(..))
 import Data.List.Utils (replace)
 import System.Console.ANSI (setSGRCode,
@@ -16,8 +18,10 @@ prettyPart width (Part direct section entries) = heading ++ "\n" ++ content
   where
     heading = show direct ++ ": " ++ section
     content = unlines $ map (prettyEntry width) $ reverse entries
-prettyPart _ (PartSimilar word language) =
-  colorCodeRed ++ word ++ colorCodeWhite ++ "(" ++ language ++ ")" ++ clearSGR
+prettyPart _ (PartSimilar ws lang) = plang ++ " " ++ concat pwords
+  where  -- TODO: check line width
+    plang = colorCodeWhite ++ lang ++ ":" ++ clearSGR
+    pwords = intersperse " - " (map (\w -> colorCodeRed ++ w ++ clearSGR) ws)
 prettyPart _ x = show x
 
 stripSGR :: String -> String
