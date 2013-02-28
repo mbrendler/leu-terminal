@@ -17,11 +17,11 @@ prettyPart :: Int -> Part i -> String
 prettyPart width (Part direct section entries) = heading ++ "\n" ++ content
   where
     heading = show direct ++ ": " ++ section
-    content = unlines $ map (prettyEntry width) $ reverse entries
+    content = unlines [prettyEntry width x | x <- reverse entries]
 prettyPart _ (PartSimilar ws lang) = plang ++ " " ++ concat pwords
   where  -- TODO: check line width
     plang = colorCodeWhite ++ lang ++ ":" ++ clearSGR
-    pwords = intersperse " - " (map (\w -> colorCodeRed ++ w ++ clearSGR) ws)
+    pwords = intersperse " - " [colorCodeRed ++ w ++ clearSGR | w <- ws]
 prettyPart _ x = show x
 
 stripSGR :: String -> String
