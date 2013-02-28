@@ -1,9 +1,10 @@
 module Leo.Parse (
     xmlStringToParts
-  , parseXmlToContent
+  , xmlStringToContent
   , queryXmlParts
-  , xmlPartsToParts
   ) where
+
+import Data.Maybe (fromMaybe)
 
 import Text.XML.HaXml.Parse (xmlParse)
 import Text.XML.HaXml.Util (docContent, contentElem, attrs)
@@ -20,17 +21,13 @@ import Leo.Types (
 
 
 xmlStringToParts :: String -> [Part Posn]
-xmlStringToParts = xmlPartsToParts . queryXmlParts . parseXmlToContent
+xmlStringToParts = concatMap xmlPartToPart . queryXmlParts . xmlStringToContent
 
-parseXmlToContent :: String -> Content Posn
-parseXmlToContent xmlStr =
-  docContent (posInNewCxt "" Nothing) (xmlParse "" xmlStr)
+xmlStringToContent :: String -> Content Posn
+xmlStringToContent s = docContent (posInNewCxt "" Nothing) (xmlParse "" s)
 
 queryXmlParts :: Content i -> [Content i]
 queryXmlParts = tag "xml" /> elm
-
-xmlPartsToParts :: [Content i] -> [Part i]
-xmlPartsToParts = concatMap xmlPartToPart
 
 xmlPartToPart :: Content i -> [Part i]
 xmlPartToPart (CElem (Elem (N "part") attributes sects) _) = let
@@ -69,4 +66,5 @@ partSimilar xmlSide = PartSimilar (getWordStrings xmlSide) (show lang)
     getWordsContents = tag "side" /> tag "word" /> txt
     getWordStrings = map showContent . getWordsContents
     attributes = attrs $ contentElem xmlSide
-    lang = snd $ head $ filter ((== N "lang") . fst) attributes
+    defaultLang = AttValue [Left ""]
+    lang = fromMaybe defaultLang $ lookup (N "lang") attributes :: AttValue
