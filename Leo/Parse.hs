@@ -67,4 +67,4 @@ partSimilar xmlSide = PartSimilar (getWordStrings xmlSide) (show lang)
     getWordStrings = map showContent . getWordsContents
     attributes = attrs $ contentElem xmlSide
     defaultLang = AttValue [Left ""]
-    lang = fromMaybe defaultLang $ lookup (N "lang") attributes :: AttValue
+    lang = fromMaybe defaultLang (lookup (N "lang") attributes) :: AttValue
