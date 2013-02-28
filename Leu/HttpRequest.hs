@@ -1,4 +1,4 @@
-module Leo.HttpRequest (searchWithHttp) where
+module Leu.HttpRequest (searchWithHttp) where
 
 import Data.List (intercalate)
 

@@ -6,9 +6,9 @@ import Codec.Binary.UTF8.String (decodeString)
 import CmdArgs (parseArguments, argsRest, testFile, OutputFormat(..),
                 outputFormat)
 import TermSize (getTermSize)
-import Leo.HttpRequest (searchWithHttp)
-import Leo.Parse (xmlStringToParts)
-import Leo.Pretty (prettyPart)
+import Leu.HttpRequest (searchWithHttp)
+import Leu.Parse (xmlStringToParts)
+import Leu.Pretty (prettyPart)
 
 
 putLines :: [String] -> IO ()

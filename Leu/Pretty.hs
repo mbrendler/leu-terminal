@@ -1,4 +1,4 @@
-module Leo.Pretty (prettyPart) where
+module Leu.Pretty (prettyPart) where
 
 import Data.List (intersperse)
 
@@ -10,7 +10,7 @@ import System.Console.ANSI (setSGRCode,
                             ColorIntensity(Dull, Vivid),
                             Color(Blue, Yellow, White, Red))
 
-import Leo.Types (Part(Part, PartSimilar), Translation(Translation))
+import Leu.Types (Part(Part, PartSimilar), Translation(Translation))
 
 
 prettyPart :: Int -> Part i -> String

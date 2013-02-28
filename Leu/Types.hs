@@ -1,4 +1,4 @@
-module Leo.Types (
+module Leu.Types (
     Part(..)
   , Translation(..)
   , Direct(..)

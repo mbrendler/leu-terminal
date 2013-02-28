@@ -1,4 +1,4 @@
-module Leo.Parse (
+module Leu.Parse (
     xmlStringToParts
   , xmlStringToContent
   , queryXmlParts
@@ -12,7 +12,7 @@ import Text.XML.HaXml.Posn (posInNewCxt, Posn)
 import Text.XML.HaXml.Types (Content(..), Element(..), QName(..), AttValue(..))
 import Text.XML.HaXml.Combinators (tag, (/>), txt, elm)
 
-import Leo.Types (
+import Leu.Types (
     Part(..)
   , Direct(..)
   , Translation(..)
