@@ -3,14 +3,18 @@ module Leu.Types (
   , Translation(..)
   , Direct(..)
   , showContent
+  , showElement
   ) where
 
-import Text.XML.HaXml.Types (Content)
-import Text.XML.HaXml.Html.Generate (htmlprint)
+import Text.XML.HaXml.Types (Content, Element)
+import Text.XML.HaXml.Html.Pretty (content, element)
 
 
 showContent :: Content i -> String
-showContent = show . htmlprint . (:[])
+showContent = show . content
+
+showElement :: Element i -> String
+showElement = show . element
 
 
 data Translation i = Translation (Content i) (Content i)

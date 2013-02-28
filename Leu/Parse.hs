@@ -17,6 +17,7 @@ import Leu.Types (
   , Direct(..)
   , Translation(..)
   , showContent
+  , showElement
   )
 
 
@@ -30,20 +31,23 @@ queryXmlParts :: Content i -> [Content i]
 queryXmlParts = tag "xml" /> elm
 
 xmlPartToPart :: Content i -> [Part i]
-xmlPartToPart (CElem (Elem (N "part") attributes sects) _) = let
+xmlPartToPart = elementPartToPart . contentElem
+
+elementPartToPart :: Element i -> [Part i]
+elementPartToPart (Elem (N "part") attributes sects) = let
     directFromAttr (AttValue [Left "1"]) = Direct
     directFromAttr _ = Indirect
     direct = maybe Indirect directFromAttr (lookup (N "direct") attributes)
     createPart (title, entries) = Part direct title entries
   in map (createPart . sectionData) sects
-xmlPartToPart (CElem (Elem (N "similar") _ sides) _) = map partSimilar sides
-xmlPartToPart (CElem (Elem (N "advMedia") _ _) _) = []
-xmlPartToPart (CElem (Elem (N "search") _ _) _) = []
-xmlPartToPart (CElem (Elem (N "forum") _ _) _) = []
-xmlPartToPart (CElem (Elem (N "baseform") _ _) _) = []
-xmlPartToPart (CElem (Elem (N "forumRef") _ _) _) = []
-xmlPartToPart (CElem (Elem (N "servicedata") _ _) _) = []
-xmlPartToPart x = [UNSUPPORTED_PART $ showContent x]
+elementPartToPart (Elem (N "similar") _ sides) = map partSimilar sides
+elementPartToPart (Elem (N "advMedia") _ _) = []
+elementPartToPart (Elem (N "search") _ _) = []
+elementPartToPart (Elem (N "forum") _ _) = []
+elementPartToPart (Elem (N "baseform") _ _) = []
+elementPartToPart (Elem (N "forumRef") _ _) = []
+elementPartToPart (Elem (N "servicedata") _ _) = []
+elementPartToPart x = [UNSUPPORTED_PART $ showElement x]
 
 sectionData :: Content i -> (String, [Translation i])
 sectionData (CElem (Elem (N "section") sattrs xmlEntries) _) = let
