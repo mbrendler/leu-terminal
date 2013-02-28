@@ -38,7 +38,7 @@ xmlPartToPart (CElem (Elem (N "part") attributes sects) _) = let
     directFromAttr _ = Indirect
     direct = maybe Indirect directFromAttr (lookup (N "direct") attributes)
     createPart (title, entries) = Part direct title entries
-  in map (createPart . sectionData) $ sects
+  in map (createPart . sectionData) sects
 xmlPartToPart (CElem (Elem (N "similar") _ sides) _) = map partSimilar sides
 xmlPartToPart (CElem (Elem (N "advMedia") _ _) _) = []
 xmlPartToPart (CElem (Elem (N "search") _ _) _) = []
@@ -69,4 +69,4 @@ partSimilar xmlSide = PartSimilar (getWordStrings xmlSide) (show lang)
     getWordsContents = tag "side" /> tag "word" /> txt
     getWordStrings = map showContent . getWordsContents
     attributes = attrs $ contentElem xmlSide
-    lang = snd $ head $ filter ((== (N "lang")) . fst) attributes
+    lang = snd $ head $ filter ((== N "lang") . fst) attributes
