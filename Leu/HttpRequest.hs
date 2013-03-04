@@ -13,7 +13,8 @@ buildLeoUrl searchFor = url ++ "?" ++ intercalate "&" arguments
     url = "http://dict.leo.org/dictQuery/m-vocab/ende/query.xml"
     arguments = [
         "tolerMode=nof"
-      , "lp=ende&lang=de"
+      , "lp=ende"
+      , "lang=de"
       , "rmWords=off"
       , "rmSearch=on"
       , "search=" ++ urlEncode searchFor
