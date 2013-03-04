@@ -6,14 +6,18 @@ import Network.HTTP (simpleHTTP, getRequest, getResponseBody, Request)
 import Network.HTTP.Headers (setHeaders, Header(Header), HeaderName(HdrCookie))
 import Network.HTTP.Base (urlEncode)
 
+import Leu.Types (LanguageMapping)
+import Leu.Utils (toLowerCase)
 
-buildLeoUrl :: String -> String
-buildLeoUrl searchFor = url ++ "?" ++ intercalate "&" arguments
+
+buildLeoUrl :: String -> LanguageMapping -> String
+buildLeoUrl searchFor lang = url ++ "?" ++ intercalate "&" arguments
   where
-    url = "http://dict.leo.org/dictQuery/m-vocab/ende/query.xml"
+    langStr = toLowerCase $ show lang
+    url = "http://dict.leo.org/dictQuery/m-vocab/" ++ langStr ++ "/query.xml"
     arguments = [
         "tolerMode=nof"
-      , "lp=ende"
+      , "lp=" ++ langStr
       , "lang=de"
       , "rmWords=off"
       , "rmSearch=on"
@@ -29,6 +33,7 @@ addHeaders r = setHeaders r [
     Header HdrCookie "LEOABTEST=T; browser=webkit%3B5%3Bajax"
   ]
 
-searchWithHttp :: String -> IO String
-searchWithHttp search = httpRequest search >>= getResponseBody
-  where httpRequest = simpleHTTP . addHeaders . getRequest . buildLeoUrl
+searchWithHttp :: String -> LanguageMapping -> IO String
+searchWithHttp search lang = httpRequest >>= getResponseBody
+  where
+    httpRequest = simpleHTTP . addHeaders . getRequest $ buildLeoUrl search lang

@@ -4,11 +4,12 @@ import Control.Monad (liftM2)
 import Codec.Binary.UTF8.String (decodeString)
 
 import CmdArgs (parseArguments, argsRest, testFile, OutputFormat(..),
-                outputFormat)
+                outputFormat, language)
 import TermSize (getTermSize)
 import Leu.HttpRequest (searchWithHttp)
 import Leu.Parse (xmlStringToParts)
 import Leu.Pretty (prettyPart)
+import Leu.Types (lDescription)
 
 
 putLines :: [String] -> IO ()
@@ -29,8 +30,11 @@ main :: IO ()
 main = do
   opts <- liftM2 parseArguments getProgName getArgs
   
+  let lang = language opts
+  putStrLn $ "use language: " ++ show lang ++ " (" ++ lDescription lang ++ ")"
+  
   let searchFor = unwords $ argsRest opts
-  queryResult <- maybe (searchWithHttp searchFor) readFile (testFile opts)
+  queryResult <- maybe (searchWithHttp searchFor lang) readFile (testFile opts)
 
   (_, termWidth) <- getTermSize
   putLines $ getOutputLines termWidth (outputFormat opts) queryResult

@@ -4,10 +4,16 @@ module Leu.Types (
   , Direct(..)
   , showContent
   , showElement
+  , LanguageMapping(..)
+  , lDescription
+  , allLanguageMappings
+  , readLang
   ) where
 
 import Text.XML.HaXml.Types (Content, Element)
 import Text.XML.HaXml.Html.Pretty (content, element)
+
+import Leu.Utils (toLowerCase)
 
 
 showContent :: Content i -> String
@@ -37,3 +43,32 @@ data Part i = Part Direct Title [Translation i]
             | PartSimilar [Word] Language
             | UNSUPPORTED_PART String
             deriving (Show)
+
+
+data LanguageMapping = EnDe
+                     | FrDe
+                     | EsDe
+                     | ItDe
+                     | ChDe
+                     | RuDe
+                     | PtDe
+                     | PlDe
+                     deriving (Show, Enum, Bounded)
+
+lDescription :: LanguageMapping -> String
+lDescription EnDe = "English    - German"
+lDescription FrDe = "French     - German"
+lDescription EsDe = "Spanish    - German"
+lDescription ItDe = "Italian    - German"
+lDescription ChDe = "Chinese    - German"
+lDescription RuDe = "Russian    - German"
+lDescription PtDe = "Portuguese - German"
+lDescription PlDe = "Polish     - German"
+
+allLanguageMappings :: [LanguageMapping]
+allLanguageMappings = [minBound ..]
+
+readLang :: String -> LanguageMapping
+readLang x = if null langMaps then EnDe else head langMaps
+  where 
+    langMaps = [l | l <- allLanguageMappings, toLowerCase x == toLowerCase (show l)]
