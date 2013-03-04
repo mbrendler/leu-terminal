@@ -37,9 +37,11 @@ runProgram opts = do
   (_, termWidth) <- getTermSize
   putLines $ getOutputLines termWidth (outputFormat opts) queryResult
 
+
 languageMappingsString :: String
 languageMappingsString = unlines $ map processOneLine allLanguageMappings
   where processOneLine x = show x ++ ": " ++ lDescription x
+
 
 main :: IO ()
 main = do
