@@ -4,6 +4,7 @@ import Data.List (intercalate)
 
 import Network.HTTP (simpleHTTP, getRequest, getResponseBody, Request)
 import Network.HTTP.Headers (setHeaders, Header(Header), HeaderName(HdrCookie))
+import Network.HTTP.Base (urlEncode)
 
 
 buildLeoUrl :: String -> String
@@ -15,7 +16,7 @@ buildLeoUrl searchFor = url ++ "?" ++ intercalate "&" arguments
       , "lp=ende&lang=de"
       , "rmWords=off"
       , "rmSearch=on"
-      , "search=" ++ searchFor
+      , "search=" ++ urlEncode searchFor
       , "searchLoc=0"
       , "resultOrder=basic"
       , "multiwordShowSingle=on"

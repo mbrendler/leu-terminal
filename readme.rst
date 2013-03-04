@@ -21,6 +21,5 @@ Usage::
 TODO
 ====
 
- * Convert 'UMLAUTE' so that we can use it in the search
  * support more languages
  * ignore or process *minprio*-tag
