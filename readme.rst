@@ -21,5 +21,4 @@ Usage::
 TODO
 ====
 
- * support more languages
  * ignore or process *minprio*-tag
