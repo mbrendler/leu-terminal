@@ -3,13 +3,13 @@ import Control.Monad (liftM2)
 
 import Codec.Binary.UTF8.String (decodeString)
 
-import CmdArgs (parseArguments, argsRest, testFile, OutputFormat(..),
-                outputFormat, language)
+import CmdArgs (Options, parseArguments, argsRest, testFile, OutputFormat(..),
+                outputFormat, language, showLanguages)
 import TermSize (getTermSize)
 import Leu.HttpRequest (searchWithHttp)
 import Leu.Parse (xmlStringToParts)
 import Leu.Pretty (prettyPart)
-import Leu.Types (lDescription)
+import Leu.Types (lDescription, allLanguageMappings)
 
 
 putLines :: [String] -> IO ()
@@ -26,10 +26,8 @@ getOutputLines termWidth Pretty queryResult =
        else map (prettyPart termWidth) $ reverse parts
 
 
-main :: IO ()
-main = do
-  opts <- liftM2 parseArguments getProgName getArgs
-  
+runProgram :: Options -> IO ()
+runProgram opts = do
   let lang = language opts
   putStrLn $ "use language: " ++ show lang ++ " (" ++ lDescription lang ++ ")"
   
@@ -38,3 +36,14 @@ main = do
 
   (_, termWidth) <- getTermSize
   putLines $ getOutputLines termWidth (outputFormat opts) queryResult
+
+languageMappingsString :: String
+languageMappingsString = unlines $ map processOneLine allLanguageMappings
+  where processOneLine x = show x ++ ": " ++ lDescription x
+
+main :: IO ()
+main = do
+  opts <- liftM2 parseArguments getProgName getArgs
+  if showLanguages opts
+    then putStrLn languageMappingsString
+    else runProgram opts

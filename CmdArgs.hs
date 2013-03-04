@@ -1,10 +1,12 @@
 module CmdArgs (
-    parseArguments
+    Options
+  , parseArguments
   , testFile
   , argsRest
   , OutputFormat(..)
   , outputFormat
   , language
+  , showLanguages 
   ) where
 
 import System.Console.ParseArgs (
@@ -27,7 +29,9 @@ import Leu.Types (
 
 data OutputFormat = Pretty | Xml deriving (Show)
 
-data ArgumentKeys = File | XmlOut | Lang deriving (Show, Ord, Eq)
+data ArgumentKeys = File | XmlOut | Lang | ShowLangs deriving (Show, Ord, Eq)
+
+type Options = Args ArgumentKeys
 
 allArguments :: [Arg ArgumentKeys]
 allArguments =
@@ -39,6 +43,8 @@ allArguments =
   , Arg Lang (Just 'l') (Just "language")
         (argDataOptional "LANG" ArgtypeString)
         "use another language default is ende"
+  , Arg ShowLangs Nothing (Just "show-languages") Nothing
+        "show all supported langages"
   ]
 
 parseArguments :: String -> [String] -> Args ArgumentKeys
@@ -52,3 +58,6 @@ outputFormat args = if gotArg args XmlOut then Xml else Pretty
 
 language :: Args ArgumentKeys -> LanguageMapping
 language args = maybe EnDe readLang (getArg args Lang)
+
+showLanguages :: Args ArgumentKeys -> Bool
+showLanguages args = gotArg args ShowLangs
