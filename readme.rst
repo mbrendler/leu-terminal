@@ -2,7 +2,7 @@
 Leu
 ===
 
-Leu is a little command line tool to query a popular translation service.
+Leu is a little command line tool to query dict.leo.org.
 
 
 Getting started
@@ -16,6 +16,7 @@ Build::
 Usage::
 
    $ dist/build/leu/leu loewe
+   $ dist/build/leu/leu -h
 
 
 TODO
