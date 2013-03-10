@@ -4,6 +4,9 @@ Leu
 
 Leu is a little command line tool to query dict.leo.org.
 
+This is one of my first Haskell projects, so there is much to improve and to
+learn.
+
 
 Getting started
 ===============
@@ -15,7 +18,7 @@ Build::
 
 Usage::
 
-   $ dist/build/leu/leu loewe
+   $ dist/build/leu/leu löwe
    $ dist/build/leu/leu -h
 
 
