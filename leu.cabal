@@ -10,6 +10,7 @@ tested-with:         GHC==6.12.1
 
 Executable leu
   Main-is:           leu.hs
+  Other-Modules:     TermSize
   Build-Depends:     base >= 3 && < 5,
                      HaXml == 1.23.3,
                      HTTP >= 4000.1.1,
