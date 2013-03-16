@@ -13,6 +13,7 @@ Getting started
 
 Build::
 
+   $ cabal install --only-dependencies
    $ cabal configure
    $ cabal build
 
