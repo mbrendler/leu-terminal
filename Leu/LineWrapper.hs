@@ -6,6 +6,7 @@ module Leu.LineWrapper (
   , showWords
   , showLines
   , wrap
+  , wrapFillStart
   ) where
 
 import Data.List (intercalate, intersperse)
@@ -20,6 +21,8 @@ instance Show TextPart where
   show (TextPart s opts endOpt) = concat opts ++ s ++ endOpt
   show Space = " "
 
+spacesTextPart :: Int -> TextPart
+spacesTextPart n = TextPart (replicate n ' ') [] ""
 
 showWords :: [TextPart] -> String
 showWords = concatMap show . intersperse Space
@@ -44,17 +47,27 @@ wrap n = combineLineParts . splitLongParts
       x ++ (if length s > n
             then map (\a -> TextPart a y z) (chop s)
             else [TextPart s y z])
+    splitLongPart _ Space = [Space]
     chop "" = []
     chop s = start : chop rest
       where (start,rest) = splitAt n s
 
-    combineLineParts ts = inner ts [] [] 0
+    combineLineParts textParts = inner textParts [] [] 0
       where
         inner [] r m _ = reverse (reverse m:r)
         inner (t:ts) r m l
           | n >= lineLength = inner ts r (t:m) lineLength
           | otherwise = inner (t:ts) (reverse m:r) [] 0
           where lineLength = textPartLen t + l + if l > 0 then 1 else 0
+
+
+wrapFillStart :: Int -> [TextPart] -> [[TextPart]]
+wrapFillStart n = map addStart . wrap n
+  where
+    addStart :: [TextPart] -> [TextPart]
+    addStart x = if textPartsLen x < n
+                 then (spacesTextPart (n - (textPartsLen x) - 1)) : x
+                 else x
 
 
 -- The following is only used for testing.
@@ -69,8 +82,11 @@ test l x y
   | otherwise = putStrLn $ show l ++ ": " ++ show x ++ " != " ++ show y
 
 testWrap l e w t = test l e $ showLines $ wrap w $ createSimpleParts t
+testWrapFillStart l e w t = test l e $ showLines $ wrapFillStart w $ createSimpleParts t
 
 main :: IO ()
 main = do
-  testWrap 1 "12\n34\n5" 2 "12345"
-  testWrap 2 "1234\n78\n90a a" 5 "1234 78 90a a"
+  testWrap "1" "12\n34\n5" 2 "12345"
+  testWrap "2" "1234\n78\n90a a" 5 "1234 78 90a a"
+  testWrapFillStart "3" "  12" 4 "12"
+  testWrapFillStart "4" "  12\n 345" 4 "12 345"
