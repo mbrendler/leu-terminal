@@ -14,14 +14,14 @@ test l x y
   | otherwise = putStrLn $ show l ++ ": " ++ show x ++ " != " ++ show y
 
 testConverter :: (Show d, Eq b, Show b) => d -> b -> (a -> b) -> a -> IO ()
-testConverter d e f t = test d e $ (f t)
+testConverter d e f t = test d e (f t)
 
 testWrap :: String -> String -> Int -> String -> IO ()
-testWrap d e w t = testConverter d e converter t
+testWrap d e w = testConverter d e converter
   where converter = showLines . wrap w . createSimpleParts
 
 testWrapFillStart :: String -> String -> Int -> String -> IO ()
-testWrapFillStart d e w t = testConverter d e converter t
+testWrapFillStart d e w = testConverter d e converter
   where converter = showLines . wrapFillStart w . createSimpleParts
 
 main :: IO ()

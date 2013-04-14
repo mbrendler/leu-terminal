@@ -44,14 +44,14 @@ prettyEntry _ x = show x
 
 
 reprToTextPart :: Content i -> [TextPart]
-reprToTextPart c = reprToTextPart' [] c
+reprToTextPart = reprToTextPart' []
 
 contentsToTextParts :: [String] -> [Content i] -> [TextPart]
-contentsToTextParts o c = concatMap (reprToTextPart' o) c
+contentsToTextParts o = concatMap (reprToTextPart' o)
 
 reprToTextPart' :: [String] -> Content i -> [TextPart]
 reprToTextPart' opts (CElem (Elem (N tagName) _ subs) _) =
-  contentsToTextParts ((tagToSGR tagName):opts) subs
+  contentsToTextParts (tagToSGR tagName : opts) subs
 reprToTextPart' opts (CElem (Elem (QN _ _) _ _) _) =
   [TextPart "Not handled: QN" opts clearSGR]
 reprToTextPart' opts (CString _ s _) = [TextPart s opts clearSGR]
