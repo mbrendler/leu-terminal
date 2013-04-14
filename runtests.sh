@@ -1,3 +1,3 @@
 #!/bin/bash
 
-runhaskell Leu/LineWrapper.hs
+runhaskell Tests.hs
