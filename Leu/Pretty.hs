@@ -35,7 +35,8 @@ prettyEntry :: Int -> Translation i -> String
 prettyEntry textWidth (Translation l r) = showLines allLines
   where
     sep = TextPart "--" [] ""
-    oneSideWidth = (textWidth - (2 + textPartLen sep)) `div` 2
+    sepLenWithEnclosingSpaces = 2 + textPartLen sep
+    oneSideWidth = (textWidth - sepLenWithEnclosingSpaces) `div` 2
     leftDefault = TextPart (replicate oneSideWidth ' ') [] ""
     left = wrapFillStart oneSideWidth $ reprToTextPart l
     right = wrap oneSideWidth $ reprToTextPart r
