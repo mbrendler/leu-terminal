@@ -30,10 +30,13 @@ runProgram :: Options -> IO ()
 runProgram opts = do
   let lang = language opts
   putStrLn $ "use language: " ++ show lang ++ " (" ++ lDescription lang ++ ")"
-  
+
   let searchFor = unwords $ argsRest opts
   queryResult <- maybe (searchWithHttp searchFor lang) readFile (testFile opts)
 
+  -- The following line is the source of:
+  --   "ioctl: illegal operation (Inappropriate ioctl for device)"
+  --   If leu is used like this "leu hello | cat"
   (_, termWidth) <- getTermSize
   putLines $ getOutputLines termWidth (outputFormat opts) queryResult
 
