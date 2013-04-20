@@ -34,10 +34,7 @@ runProgram opts = do
   let searchFor = unwords $ argsRest opts
   queryResult <- maybe (searchWithHttp searchFor lang) readFile (testFile opts)
 
-  -- The following line is the source of:
-  --   "ioctl: illegal operation (Inappropriate ioctl for device)"
-  --   If leu is used like this "leu hello | cat"
-  (_, termWidth) <- getTermSize
+  (_, termWidth) <- getTermSize (Just (25, 80))
   putLines $ getOutputLines termWidth (outputFormat opts) queryResult
 
 

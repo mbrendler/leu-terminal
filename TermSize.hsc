@@ -6,7 +6,7 @@
 module TermSize (getTermSize) where
 
 import Foreign
-import Foreign.C.Error
+import Foreign.C.Error (throwErrno)
 import Foreign.C.Types
 
 #include <sys/ioctl.h>
@@ -33,11 +33,16 @@ instance Storable WinSize where
 foreign import ccall "sys/ioctl.h ioctl"
   ioctl :: CInt -> CInt -> Ptr WinSize -> IO CInt
 
+defaultErrno :: Maybe a -> String -> IO a
+defaultErrno (Just x) _ = return x
+defaultErrno Nothing s = throwErrno s
+
 -- | Return current number of (rows, columns) of the terminal.
-getTermSize :: IO (Int, Int)
-getTermSize = 
+getTermSize :: Maybe (Int, Int) -> IO (Int, Int)
+getTermSize defaultSize = 
   with (WinSize 0 0) $ \ws -> do
-    throwErrnoIfMinus1 "ioctl" $
-      ioctl (#const STDOUT_FILENO) (#const TIOCGWINSZ) ws
+    rc <- ioctl (#const STDOUT_FILENO) (#const TIOCGWINSZ) ws
     WinSize row col <- peek ws
-    return (fromIntegral row, fromIntegral col)
+    if rc == CInt (-1)
+      then defaultErrno defaultSize "ioctl"
+      else return (fromIntegral row, fromIntegral col)

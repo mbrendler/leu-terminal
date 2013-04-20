@@ -26,5 +26,4 @@ Usage::
 TODO
 ====
 
- * Leu and pipes: ``leu hello | cat`` (*getTermSize* is the problem)
  * ignore or process *minprio*-tag
