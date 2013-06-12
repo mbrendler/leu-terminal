@@ -40,6 +40,9 @@ elementPartToPart (Elem (N "part") attributes sects) = let
     direct = maybe Indirect directFromAttr (lookup (N "direct") attributes)
     createPart (title, entries) = Part direct title entries
   in map (createPart . sectionData) sects
+elementPartToPart (Elem (N "sectionlist") _ sects) = let
+    createPart (title, entries) = Part Direct title entries
+  in map (createPart . sectionData) sects
 elementPartToPart (Elem (N "similar") _ sides) = map partSimilar sides
 elementPartToPart (Elem (N "advMedia") _ _) = []
 elementPartToPart (Elem (N "search") _ _) = []
