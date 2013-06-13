@@ -43,6 +43,6 @@ getTermSize defaultSize =
   with (WinSize 0 0) $ \ws -> do
     rc <- ioctl (#const STDOUT_FILENO) (#const TIOCGWINSZ) ws
     WinSize row col <- peek ws
-    if rc == CInt (-1)
+    if rc == (-1)
       then defaultErrno defaultSize "ioctl"
       else return (fromIntegral row, fromIntegral col)
