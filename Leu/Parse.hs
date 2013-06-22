@@ -4,7 +4,7 @@ module Leu.Parse (
   , queryXmlParts
   ) where
 
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, mapMaybe)
 
 import Text.XML.HaXml.Parse (xmlParse)
 import Text.XML.HaXml.Util (docContent, contentElem, attrs)
@@ -56,15 +56,16 @@ sectionData :: Content i -> (String, [Translation i])
 sectionData (CElem (Elem (N "section") sattrs xmlEntries) _) = let
     defaultTitle = AttValue [Left ""]
     sectionTitle = fromMaybe defaultTitle (lookup (N "sctTitle") sattrs)
-    translations = map entryToTranslation xmlEntries
+    translations = mapMaybe entryToTranslation xmlEntries
   in (show sectionTitle, translations)
 sectionData x = ("UNSUPORTED_SECTION: " ++ showContent x, [])
 
-entryToTranslation :: Content i -> Translation i
+entryToTranslation :: Content i -> Maybe (Translation i)
 entryToTranslation (CElem (Elem (N "entry") _ (side1:side2:[_info])) _) = let
     repr side = head $ tag "side" /> tag "repr" $ side
-  in Translation (repr side1) (repr side2)
-entryToTranslation x = UNSUPPORTED_TRANSLATION $ showContent x
+  in Just $ Translation (repr side1) (repr side2)
+entryToTranslation (CElem (Elem (N "minprio") _ _) _) = Nothing
+entryToTranslation x = Just $ UNSUPPORTED_TRANSLATION $ showContent x
 
 
 partSimilar :: Content i -> Part i

@@ -21,9 +21,3 @@ Usage::
 
    $ dist/build/leu/leu löwe
    $ dist/build/leu/leu -h
-
-
-TODO
-====
-
- * ignore or process *minprio*-tag
