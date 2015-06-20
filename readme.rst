@@ -2,10 +2,10 @@
 Leu
 ===
 
-Leu is a little command line tool to query dict.leo.org.
+Leu is a command line tool to query dict.leo.org.
 
 This is one of my first Haskell projects, so there is much to improve and to
-learn.
+learn.  But it works!
 
 
 Getting started
