@@ -69,7 +69,7 @@ clearSGR = setSGRCode []
 tagToSGR :: String -> String
 tagToSGR "b" = colorCodeBlue
 tagToSGR "small" = colorCodeYellow
-tagToSGR "sup" = colorCodeWhite
+tagToSGR "t" = colorCodeWhite
 tagToSGR "i" = ""
 tagToSGR "repr" = ""
 tagToSGR "br" = ""
