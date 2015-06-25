@@ -40,7 +40,7 @@ type Word = String
 type Language = String
 
 data Part i = Part Direct Title [Translation i]
-            | PartSimilar [Word] Language
+            | PartSimilar [Leu.Types.Word] Language
             | UNSUPPORTED_PART String
             deriving (Show)
 
@@ -70,5 +70,5 @@ allLanguageMappings = [minBound ..]
 
 readLang :: String -> LanguageMapping
 readLang x = if null langMaps then EnDe else head langMaps
-  where 
+  where
     langMaps = [l | l <- allLanguageMappings, toLowerCase x == toLowerCase (show l)]

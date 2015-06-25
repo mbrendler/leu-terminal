@@ -1,21 +1,21 @@
 Name:                leu
-Version:             0.2
+Version:             0.3
 Description:         TODO
 License:             AllRightsReserved
 Author:              Maik Brendler
 Maintainer:          TODO
 Build-Type:          Simple
 Cabal-Version:       >=1.2
-tested-with:         GHC==6.12.1
+tested-with:         GHC==7.10.1
 
 Executable leu
   Main-is:           leu.hs
   Other-Modules:     TermSize
   Build-Depends:     base >= 3 && < 5,
-                     HaXml == 1.23.3,
-                     HTTP >= 4000.1.1,
-                     ansi-terminal >= 0.5,
-                     utf8-string >= 0.3,
-                     parseargs == 0.1.3.4,
-                     MissingH == 1.2.0.0
+                     HaXml == 1.25.3,
+                     HTTP >= 4000.2.20,
+                     ansi-terminal >= 0.6.2.1,
+                     utf8-string >= 1,
+                     parseargs == 0.1.5.2,
+                     MissingH == 1.3.0.1
   ghc-options:       -Wall -O2
