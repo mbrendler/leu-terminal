@@ -69,10 +69,11 @@ clearSGR = setSGRCode []
 tagToSGR :: String -> String
 tagToSGR "b" = colorCodeBlue
 tagToSGR "small" = colorCodeYellow
-tagToSGR "t" = colorCodeWhite
+tagToSGR "sup" = colorCodeWhite
 tagToSGR "i" = ""
 tagToSGR "repr" = ""
 tagToSGR "br" = ""
+tagToSGR "t" = ""
 tagToSGR x = "UNHANDLED TAGNAME (" ++ x ++ ")"
 
 colorCodeBlue :: String
