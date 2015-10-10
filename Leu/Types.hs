@@ -87,6 +87,6 @@ data Terminal = Terminal Width ColorSupport
 
 buildTerminal :: IO Terminal
 buildTerminal = do
-  (_, termWidth) <- getTermSize (Just (25, 80))
+  (_, width) <- getTermSize (Just (25, 80))
   colorSupport <- hSupportsANSI stdout
-  return $ Terminal termWidth colorSupport
+  return $ Terminal width colorSupport
