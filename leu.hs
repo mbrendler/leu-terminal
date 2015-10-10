@@ -1,8 +1,10 @@
 import System.Environment (getArgs, getProgName)
+import System.IO (stdout)
 import Control.Monad (liftM2)
 
 import Codec.Binary.UTF8.String (decodeString)
 
+import System.Console.ANSI (hSupportsANSI)
 import CmdArgs (Options, parseArguments, argsRest, testFile, OutputFormat(..),
                 outputFormat, language, showLanguages)
 import TermSize (getTermSize)
@@ -16,14 +18,14 @@ putLines :: [String] -> IO ()
 putLines = putStr . decodeString . unlines
 
 
-getOutputLines :: Int -> OutputFormat -> String -> [String]
-getOutputLines _ Xml queryResult = [queryResult]
-getOutputLines termWidth Pretty queryResult =
+getOutputLines :: Int -> Bool -> OutputFormat -> String -> [String]
+getOutputLines _ _ Xml queryResult = [queryResult]
+getOutputLines termWidth colorSupport Pretty queryResult =
   let parts = xmlStringToParts queryResult
     in if null parts
        then ["No translation found.",
              "Use '-x' to show the XML response."]
-       else map (prettyPart termWidth) $ reverse parts
+       else map (prettyPart colorSupport termWidth) $ reverse parts
 
 
 runProgram :: Options -> IO ()
@@ -35,7 +37,8 @@ runProgram opts = do
   queryResult <- maybe (searchWithHttp searchFor lang) readFile (testFile opts)
 
   (_, termWidth) <- getTermSize (Just (25, 80))
-  putLines $ getOutputLines termWidth (outputFormat opts) queryResult
+  colorSupport <- hSupportsANSI stdout
+  putLines $ getOutputLines termWidth colorSupport (outputFormat opts) queryResult
 
 
 languageMappingsString :: String

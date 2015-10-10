@@ -19,47 +19,52 @@ import Leu.LineWrapper (
   , showLines
   )
 
-
-prettyPart :: Int -> Part i -> String
-prettyPart width (Part direct section entries) = heading ++ "\n" ++ content
+prettyPart :: Bool -> Int -> Part i -> String
+prettyPart colorSupport width part = _prettyPart width part
   where
-    heading = show direct ++ ": " ++ section
-    content = unlines [prettyEntry width x | x <- reverse entries]
-prettyPart _ (PartSimilar ws lang) = plang ++ " " ++ concat pwords
-  where  -- TODO: check line width
-    plang = colorCodeWhite ++ lang ++ ":" ++ clearSGR
-    pwords = intersperse " - " [colorCodeRed ++ w ++ clearSGR | w <- ws]
-prettyPart _ x = show x
+    clear = if colorSupport then clearSGR else ""
+    tagConverter = if colorSupport then tagToSGR else \_ -> ""
+    dullWhite = if colorSupport then colorCodeWhite else ""
+    dullRed = if colorSupport then colorCodeRed else ""
 
-prettyEntry :: Int -> Translation i -> String
-prettyEntry textWidth (Translation l r) = showLines allLines
-  where
-    sep = TextPart "--" [] ""
-    sepLenWithEnclosingSpaces = 2 + textPartLen sep
-    oneSideWidth = (textWidth - sepLenWithEnclosingSpaces) `div` 2
-    leftDefault = TextPart (replicate oneSideWidth ' ') [] ""
-    left = wrapFillStart oneSideWidth $ reprToTextPart l
-    right = wrap oneSideWidth $ reprToTextPart r
-    allLines = zipWithDefault ((++). (++ [sep])) [leftDefault] [] left right
-prettyEntry _ x = show x
+    _prettyPart :: Int -> Part i -> String
+    _prettyPart width (Part direct section entries) = heading ++ "\n" ++ content
+      where
+        heading = show direct ++ ": " ++ section
+        content = unlines [prettyEntry width x | x <- reverse entries]
+    _prettyPart _ (PartSimilar ws lang) = plang ++ " " ++ concat pwords
+      where  -- TODO: check line width
+        plang = dullWhite ++ lang ++ ":" ++ clear
+        pwords = intersperse " - " [dullRed ++ w ++ clear | w <- ws]
+    _prettyPart _ x = show x
 
+    prettyEntry :: Int -> Translation i -> String
+    prettyEntry textWidth (Translation l r) = showLines allLines
+      where
+        sep = TextPart "--" [] ""
+        sepLenWithEnclosingSpaces = 2 + textPartLen sep
+        oneSideWidth = (textWidth - sepLenWithEnclosingSpaces) `div` 2
+        leftDefault = TextPart (replicate oneSideWidth ' ') [] ""
+        left = wrapFillStart oneSideWidth $ reprToTextPart l
+        right = wrap oneSideWidth $ reprToTextPart r
+        allLines = zipWithDefault ((++). (++ [sep])) [leftDefault] [] left right
+    prettyEntry _ x = show x
 
-reprToTextPart :: Content i -> [TextPart]
-reprToTextPart = reprToTextPart' []
+    reprToTextPart :: Content i -> [TextPart]
+    reprToTextPart = reprToTextPart' []
 
-contentsToTextParts :: [String] -> [Content i] -> [TextPart]
-contentsToTextParts o = concatMap (reprToTextPart' o)
+    contentsToTextParts :: [String] -> [Content i] -> [TextPart]
+    contentsToTextParts o = concatMap (reprToTextPart' o)
 
-reprToTextPart' :: [String] -> Content i -> [TextPart]
-reprToTextPart' opts (CElem (Elem (N tagName) _ subs) _) =
-  contentsToTextParts (tagToSGR tagName : opts) subs
-reprToTextPart' opts (CElem (Elem (QN _ _) _ _) _) =
-  [TextPart "Not handled: QN" opts clearSGR]
-reprToTextPart' opts (CString _ s _) = [TextPart s opts clearSGR]
-reprToTextPart' _ (CRef (RefEntity _) _) = []  -- "RefEntity: " ++ n
-reprToTextPart' _ (CRef (RefChar _) _) = []  -- "RefChar: " ++ show n
-reprToTextPart' opts (CMisc _ _) = [TextPart "Misc" opts clearSGR]
-
+    reprToTextPart' :: [String] -> Content i -> [TextPart]
+    reprToTextPart' opts (CElem (Elem (N tagName) _ subs) _) =
+      contentsToTextParts (tagConverter tagName : opts) subs
+    reprToTextPart' opts (CElem (Elem (QN _ _) _ _) _) =
+      [TextPart "Not handled: QN" opts clear]
+    reprToTextPart' opts (CString _ s _) = [TextPart s opts clear]
+    reprToTextPart' _ (CRef (RefEntity _) _) = []  -- "RefEntity: " ++ n
+    reprToTextPart' _ (CRef (RefChar _) _) = []  -- "RefChar: " ++ show n
+    reprToTextPart' opts (CMisc _ _) = [TextPart "Misc" opts clear]
 
 -- reset the SGR
 clearSGR :: String
