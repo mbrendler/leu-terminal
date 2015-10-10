@@ -28,8 +28,8 @@ prettyPart (Terminal width colorSupport) = _prettyPart
   where
     clear = if colorSupport then clearSGR else ""
     tagConverter = if colorSupport then tagToSGR else const ""
-    dullWhite = if colorSupport then colorCodeWhite else ""
-    dullRed = if colorSupport then colorCodeRed else ""
+    dullWhite = if colorSupport then colorCode Dull White else ""
+    dullRed = if colorSupport then colorCode Dull Red else ""
 
     _prettyPart :: Part i -> String
     _prettyPart (Part direct section entries) = heading ++ "\n" ++ content
@@ -76,20 +76,14 @@ clearSGR = setSGRCode []
 
 -- set SGR by given HTML / XML tag
 tagToSGR :: String -> String
-tagToSGR "b" = colorCodeBlue
-tagToSGR "small" = colorCodeYellow
-tagToSGR "sup" = colorCodeWhite
+tagToSGR "b" = colorCode Vivid Blue
+tagToSGR "small" = colorCode Dull Yellow
+tagToSGR "sup" = colorCode Dull White
 tagToSGR "i" = ""
 tagToSGR "repr" = ""
 tagToSGR "br" = ""
 tagToSGR "t" = ""
 tagToSGR x = "UNHANDLED TAGNAME (" ++ x ++ ")"
 
-colorCodeBlue :: String
-colorCodeBlue = setSGRCode [SetColor Foreground Vivid Blue]
-colorCodeYellow :: String
-colorCodeYellow = setSGRCode [SetColor Foreground Dull Yellow]
-colorCodeWhite :: String
-colorCodeWhite = setSGRCode [SetColor Foreground Dull White]
-colorCodeRed :: String
-colorCodeRed = setSGRCode [SetColor Foreground Dull Red]
+colorCode :: ColorIntensity -> Color -> String
+colorCode intensity color = setSGRCode [SetColor Foreground intensity color]
