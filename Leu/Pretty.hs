@@ -9,7 +9,11 @@ import System.Console.ANSI (setSGRCode,
                             ColorIntensity(Dull, Vivid),
                             Color(Blue, Yellow, White, Red))
 
-import Leu.Types (Part(Part, PartSimilar), Translation(Translation))
+import Leu.Types (
+    Part(Part, PartSimilar)
+  , Translation(Translation)
+  , Terminal(Terminal)
+  )
 import Leu.Utils (zipWithDefault)
 import Leu.LineWrapper (
     TextPart(..)
@@ -19,36 +23,36 @@ import Leu.LineWrapper (
   , showLines
   )
 
-prettyPart :: Bool -> Int -> Part i -> String
-prettyPart colorSupport width part = _prettyPart width part
+prettyPart :: Terminal -> Part i -> String
+prettyPart (Terminal width colorSupport) = _prettyPart
   where
     clear = if colorSupport then clearSGR else ""
-    tagConverter = if colorSupport then tagToSGR else \_ -> ""
+    tagConverter = if colorSupport then tagToSGR else const ""
     dullWhite = if colorSupport then colorCodeWhite else ""
     dullRed = if colorSupport then colorCodeRed else ""
 
-    _prettyPart :: Int -> Part i -> String
-    _prettyPart width (Part direct section entries) = heading ++ "\n" ++ content
+    _prettyPart :: Part i -> String
+    _prettyPart (Part direct section entries) = heading ++ "\n" ++ content
       where
         heading = show direct ++ ": " ++ section
-        content = unlines [prettyEntry width x | x <- reverse entries]
-    _prettyPart _ (PartSimilar ws lang) = plang ++ " " ++ concat pwords
+        content = unlines [prettyEntry x | x <- reverse entries]
+    _prettyPart (PartSimilar ws lang) = plang ++ " " ++ concat pwords
       where  -- TODO: check line width
         plang = dullWhite ++ lang ++ ":" ++ clear
         pwords = intersperse " - " [dullRed ++ w ++ clear | w <- ws]
-    _prettyPart _ x = show x
+    _prettyPart x = show x
 
-    prettyEntry :: Int -> Translation i -> String
-    prettyEntry textWidth (Translation l r) = showLines allLines
+    prettyEntry :: Translation i -> String
+    prettyEntry (Translation l r) = showLines allLines
       where
         sep = TextPart "--" [] ""
         sepLenWithEnclosingSpaces = 2 + textPartLen sep
-        oneSideWidth = (textWidth - sepLenWithEnclosingSpaces) `div` 2
+        oneSideWidth = (width - sepLenWithEnclosingSpaces) `div` 2
         leftDefault = TextPart (replicate oneSideWidth ' ') [] ""
         left = wrapFillStart oneSideWidth $ reprToTextPart l
         right = wrap oneSideWidth $ reprToTextPart r
         allLines = zipWithDefault ((++). (++ [sep])) [leftDefault] [] left right
-    prettyEntry _ x = show x
+    prettyEntry x = show x
 
     reprToTextPart :: Content i -> [TextPart]
     reprToTextPart = reprToTextPart' []

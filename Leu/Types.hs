@@ -8,7 +8,13 @@ module Leu.Types (
   , lDescription
   , allLanguageMappings
   , readLang
+  , Terminal(..)
+  , buildTerminal
   ) where
+
+import System.IO (stdout)
+import System.Console.ANSI (hSupportsANSI)
+import TermSize (getTermSize)
 
 import Text.XML.HaXml.Types (Content, Element)
 import Text.XML.HaXml.Html.Pretty (content, element)
@@ -72,3 +78,15 @@ readLang :: String -> LanguageMapping
 readLang x = if null langMaps then EnDe else head langMaps
   where
     langMaps = [l | l <- allLanguageMappings, toLowerCase x == toLowerCase (show l)]
+
+
+type Width = Int
+type ColorSupport = Bool
+
+data Terminal = Terminal Width ColorSupport
+
+buildTerminal :: IO Terminal
+buildTerminal = do
+  (_, termWidth) <- getTermSize (Just (25, 80))
+  colorSupport <- hSupportsANSI stdout
+  return $ Terminal termWidth colorSupport
