@@ -1,15 +1,15 @@
 module Leu.Types (
-    Part(..)
-  , Translation(..)
-  , Direct(..)
-  , showContent
-  , showElement
-  , LanguageMapping(..)
-  , lDescription
-  , allLanguageMappings
-  , readLang
-  , Terminal(..)
-  , buildTerminal
+  Part(..),
+  Translation(..),
+  Direct(..),
+  showContent,
+  showElement,
+  LanguageMapping(..),
+  lDescription,
+  allLanguageMappings,
+  readLang,
+  Terminal(..),
+  buildTerminal,
   ) where
 
 import System.IO (stdout)

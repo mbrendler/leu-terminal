@@ -1,15 +1,10 @@
 
-module Leu.Utils (
-    toLowerCase
-  , zipWithDefault
-  ) where
+module Leu.Utils (toLowerCase, zipWithDefault) where
 
 import Data.Char (toLower)
 
-
 toLowerCase :: String -> String
 toLowerCase = map toLower
-
 
 zipWithDefault :: (a -> b -> c) -> a -> b -> [a] -> [b] -> [c]
 zipWithDefault _ _ _ [] [] = []

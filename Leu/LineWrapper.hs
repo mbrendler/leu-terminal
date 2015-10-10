@@ -1,12 +1,12 @@
 
 module Leu.LineWrapper (
-    TextPart(..)
-  , textPartLen
-  , textPartsLen
-  , showWords
-  , showLines
-  , wrap
-  , wrapFillStart
+  TextPart(..),
+  textPartLen,
+  textPartsLen,
+  showWords,
+  showLines,
+  wrap,
+  wrapFillStart,
   ) where
 
 import Data.List (intercalate, intersperse)

@@ -3,8 +3,16 @@ import Control.Monad (liftM2)
 
 import Codec.Binary.UTF8.String (decodeString)
 
-import CmdArgs (Options, parseArguments, argsRest, testFile, OutputFormat(..),
-                outputFormat, language, showLanguages)
+import CmdArgs (
+  Options,
+  parseArguments,
+  argsRest,
+  testFile,
+  OutputFormat(..),
+  outputFormat,
+  language,
+  showLanguages
+  )
 import Leu.HttpRequest (searchWithHttp)
 import Leu.Parse (xmlStringToParts)
 import Leu.Pretty (prettyPart)

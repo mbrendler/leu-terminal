@@ -1,8 +1,8 @@
 import Leu.LineWrapper (
-    TextPart(..)
-  , showLines
-  , wrap
-  , wrapFillStart
+  TextPart(..),
+  showLines,
+  wrap,
+  wrapFillStart,
   )
 
 createSimpleParts :: String -> [TextPart]

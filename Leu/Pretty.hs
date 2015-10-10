@@ -2,25 +2,32 @@ module Leu.Pretty (prettyPart) where
 
 import Data.List (intersperse)
 
-import Text.XML.HaXml.Types (Content(..), Element(..), QName(..), Reference(..))
-import System.Console.ANSI (setSGRCode,
-                            SGR(SetColor),
-                            ConsoleLayer(Foreground),
-                            ColorIntensity(Dull, Vivid),
-                            Color(Blue, Yellow, White, Red))
+import Text.XML.HaXml.Types (
+  Content(..),
+  Element(..),
+  QName(..),
+  Reference(..),
+  )
+import System.Console.ANSI (
+  setSGRCode,
+  SGR(SetColor),
+  ConsoleLayer(Foreground),
+  ColorIntensity(Dull, Vivid),
+  Color(Blue, Yellow, White, Red)
+  )
 
 import Leu.Types (
-    Part(Part, PartSimilar)
-  , Translation(Translation)
-  , Terminal(Terminal)
+  Part(Part, PartSimilar),
+  Translation(Translation),
+  Terminal(Terminal),
   )
 import Leu.Utils (zipWithDefault)
 import Leu.LineWrapper (
-    TextPart(..)
-  , textPartLen
-  , wrap
-  , wrapFillStart
-  , showLines
+  TextPart(..),
+  textPartLen,
+  wrap,
+  wrapFillStart,
+  showLines,
   )
 
 prettyPart :: Terminal -> Part i -> String

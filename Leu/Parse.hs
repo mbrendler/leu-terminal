@@ -1,7 +1,7 @@
 module Leu.Parse (
-    xmlStringToParts
-  , xmlStringToContent
-  , queryXmlParts
+  xmlStringToParts,
+  xmlStringToContent,
+  queryXmlParts,
   ) where
 
 import Data.Maybe (fromMaybe, mapMaybe)
@@ -13,11 +13,11 @@ import Text.XML.HaXml.Types (Content(..), Element(..), QName(..), AttValue(..))
 import Text.XML.HaXml.Combinators (tag, (/>), txt, elm)
 
 import Leu.Types (
-    Part(..)
-  , Direct(..)
-  , Translation(..)
-  , showContent
-  , showElement
+  Part(..),
+  Direct(..),
+  Translation(..),
+  showContent,
+  showElement,
   )
 
 
