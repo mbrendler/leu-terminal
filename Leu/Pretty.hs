@@ -37,7 +37,7 @@ prettyPart (Terminal width colorSupport) = _prettyPart
         heading = show direct ++ ": " ++ section
         content = unlines [prettyEntry x | x <- reverse entries]
     _prettyPart (PartSimilar ws lang) = plang ++ " " ++ concat pwords
-      where  -- TODO: check line width
+      where
         plang = dullWhite ++ lang ++ ":" ++ clear
         pwords = intersperse " - " [dullRed ++ w ++ clear | w <- ws]
     _prettyPart x = show x
