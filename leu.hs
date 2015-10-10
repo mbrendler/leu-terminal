@@ -11,31 +11,26 @@ import CmdArgs (
   OutputFormat(..),
   outputFormat,
   language,
-  showLanguages
+  showLanguages,
   )
 import Leu.HttpRequest (searchWithHttp)
 import Leu.Parse (xmlStringToParts)
 import Leu.Pretty (prettyPart)
-import Leu.Types (lDescription, allLanguageMappings, buildTerminal, Terminal)
-
+import Leu.Types (allLanguageMappings, buildTerminal, Terminal, pretty)
 
 putLines :: [String] -> IO ()
 putLines = putStr . decodeString . unlines
 
 getOutputLines :: Terminal -> OutputFormat -> String -> [String]
-getOutputLines _ Xml queryResult = [queryResult]
-getOutputLines terminal Pretty queryResult =
-  let parts = xmlStringToParts queryResult
-    in if null parts
-       then ["No translation found.",
-             "Use '-x' to show the XML response."]
-       else map (prettyPart terminal) $ reverse parts
-
+getOutputLines _ Xml response = [response]
+getOutputLines terminal Pretty response = case xmlStringToParts response of
+  [] -> ["No translation found.", "Use '-x' to show the XML response."]
+  parts -> map (prettyPart terminal) $ reverse parts
 
 runProgram :: Options -> IO ()
 runProgram opts = do
   let lang = language opts
-  putStrLn $ "use language: " ++ show lang ++ " (" ++ lDescription lang ++ ")"
+  putStrLn $ "use language: " ++ pretty lang
 
   let searchFor = unwords $ argsRest opts
   queryResult <- maybe (searchWithHttp searchFor lang) readFile (testFile opts)
@@ -43,15 +38,10 @@ runProgram opts = do
   terminal <- buildTerminal
   putLines $ getOutputLines terminal (outputFormat opts) queryResult
 
-
 languageMappingsString :: String
-languageMappingsString = unlines $ map processOneLine allLanguageMappings
-  where processOneLine x = show x ++ ": " ++ lDescription x
-
+languageMappingsString = unlines $ map pretty allLanguageMappings
 
 main :: IO ()
 main = do
   opts <- liftM2 parseArguments getProgName getArgs
-  if showLanguages opts
-    then putStrLn languageMappingsString
-    else runProgram opts
+  if showLanguages opts then putStrLn languageMappingsString else runProgram opts

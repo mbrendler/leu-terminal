@@ -5,11 +5,11 @@ module Leu.Types (
   showContent,
   showElement,
   LanguageMapping(..),
-  lDescription,
   allLanguageMappings,
   readLang,
   Terminal(..),
   buildTerminal,
+  pretty,
   ) where
 
 import System.IO (stdout)
@@ -21,13 +21,11 @@ import Text.XML.HaXml.Html.Pretty (content, element)
 
 import Leu.Utils (toLowerCase)
 
-
 showContent :: Content i -> String
 showContent = show . content
 
 showElement :: Element i -> String
 showElement = show . element
-
 
 data Translation i = Translation (Content i) (Content i)
                    | UNSUPPORTED_TRANSLATION String
@@ -37,7 +35,6 @@ instance Show (Translation i) where
                            showContent x ++ " " ++
                            showContent y
   show (UNSUPPORTED_TRANSLATION x) = "UNSUPPORTED_TRANSLATION " ++ x
-
 
 data Direct = Direct | Indirect deriving (Show)
 
@@ -51,25 +48,21 @@ data Part i = Part Direct Title [Translation i]
             deriving (Show)
 
 
-data LanguageMapping = EnDe
-                     | FrDe
-                     | EsDe
-                     | ItDe
-                     | ChDe
-                     | RuDe
-                     | PtDe
-                     | PlDe
-                     deriving (Show, Enum, Bounded)
+data LanguageMapping = EnDe | FrDe | EsDe | ItDe | ChDe | RuDe | PtDe | PlDe
+  deriving (Show, Enum, Bounded)
 
-lDescription :: LanguageMapping -> String
-lDescription EnDe = "English    - German"
-lDescription FrDe = "French     - German"
-lDescription EsDe = "Spanish    - German"
-lDescription ItDe = "Italian    - German"
-lDescription ChDe = "Chinese    - German"
-lDescription RuDe = "Russian    - German"
-lDescription PtDe = "Portuguese - German"
-lDescription PlDe = "Polish     - German"
+class Pretty a where
+  pretty :: a -> String
+
+instance Pretty LanguageMapping where
+  pretty EnDe = "EnDe: English    - German"
+  pretty FrDe = "FrDe: French     - German"
+  pretty EsDe = "EsDe: Spanish    - German"
+  pretty ItDe = "ItDe: Italian    - German"
+  pretty ChDe = "ChDe: Chinese    - German"
+  pretty RuDe = "RuDe: Russian    - German"
+  pretty PtDe = "PtDe: Portuguese - German"
+  pretty PlDe = "PlDe: Polish     - German"
 
 allLanguageMappings :: [LanguageMapping]
 allLanguageMappings = [minBound ..]
