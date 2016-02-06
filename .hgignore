@@ -1,3 +1,0 @@
-glob:*.orig
-glob:dist
-glob:TermSize.hs
