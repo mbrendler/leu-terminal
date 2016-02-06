@@ -65,6 +65,6 @@ wrapFillStart :: Int -> [TextPart] -> [[TextPart]]
 wrapFillStart n = map addStart . wrap n
   where
     addStart :: [TextPart] -> [TextPart]
-    addStart x = if textPartsLen x < n
-                 then spacesTextPart (n - textPartsLen x - 1) : x
-                 else x
+    addStart x
+      | textPartsLen x < n = spacesTextPart (n - textPartsLen x - 1) : x
+      | otherwise = x
