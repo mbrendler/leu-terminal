@@ -62,7 +62,7 @@ sectionData (CElem (Elem (N "section") sattrs xmlEntries) _) = let
 sectionData x = ("UNSUPORTED_SECTION: " ++ showContent x, [])
 
 entryToTranslation :: Content i -> Maybe (Translation i)
-entryToTranslation (CElem (Elem (N "entry") _ (side1:side2:[_info])) _) = let
+entryToTranslation (CElem (Elem (N "entry") _ (side1:side2:_)) _) = let
     repr side = head $ tag "side" /> tag "repr" $ side
   in Just $ Translation (repr side1) (repr side2)
 entryToTranslation (CElem (Elem (N "minprio") _ _) _) = Nothing

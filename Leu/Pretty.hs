@@ -91,6 +91,7 @@ tagToSGR "repr" = ""
 tagToSGR "br" = ""
 tagToSGR "t" = ""
 tagToSGR "m" = ""
+tagToSGR "sr" = ""
 tagToSGR x = "UNHANDLED TAGNAME (" ++ x ++ ")"
 
 colorCode :: ColorIntensity -> Color -> String
