@@ -87,6 +87,7 @@ tagToSGR "b" = colorCode Vivid Blue
 tagToSGR "small" = colorCode Dull Yellow
 tagToSGR "sup" = colorCode Dull White
 tagToSGR "domain" = colorCode Dull White
+tagToSGR "flecttabref" = colorCode Dull White
 tagToSGR "i" = ""
 tagToSGR "repr" = ""
 tagToSGR "br" = ""
