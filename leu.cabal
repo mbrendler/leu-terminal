@@ -20,3 +20,10 @@ Executable leu
                      parseargs == 0.2.0.8,
                      MissingH == 1.4.0.1
   ghc-options:       -Wall -O2
+  other-modules:     CmdArgs,
+                     Leu.HttpRequest,
+                     Leu.LineWrapper,
+                     Leu.Parse,
+                     Leu.Pretty,
+                     Leu.Types,
+                     Leu.Utils
