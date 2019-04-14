@@ -1,2 +1,3 @@
-/dist
+/dist*
+/.ghc.environment.*
 /TermSize.hs

@@ -13,11 +13,9 @@ Getting started
 
 Build::
 
-   $ cabal install --only-dependencies
-   $ cabal configure
-   $ cabal build
+   $ cabal new-build
 
 Usage::
 
-   $ dist/build/leu/leu löwe
-   $ dist/build/leu/leu -h
+   $ dist-newstyle/build/*/*/*/x/leu/build/leu/leu löwe
+   $ dist-newstyle/build/*/*/*/x/leu/build/leu/leu -h
