@@ -52,6 +52,7 @@ elementPartToPart (Elem (N "forumRef") _ _) = []
 elementPartToPart (Elem (N "servicedata") _ _) = []
 elementPartToPart (Elem (N "ffsynlist") _ _) = []
 elementPartToPart (Elem (N "grammar") _ _) = []
+elementPartToPart (Elem (N "seetab") _ _) = []
 elementPartToPart x = [UNSUPPORTED_PART $ showElement x]
 
 sectionData :: Content i -> (String, [Translation i])
