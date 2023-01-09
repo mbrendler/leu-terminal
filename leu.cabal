@@ -12,13 +12,13 @@ Executable leu
   Main-is:           leu.hs
   Other-Modules:     TermSize
   Build-Depends:     base >= 3 && < 5,
-                     HaXml == 1.25.5,
+                     HaXml == 1.25.12,
                      http-conduit == 2.3.7,
-                     bytestring == 0.10.8.2,
+                     bytestring == 0.11.3.1,
                      ansi-terminal == 0.9,
                      utf8-string == 1.0.1.1,
                      parseargs == 0.2.0.9,
-                     MissingH == 1.4.1.0
+                     MissingH == 1.5.0.1,
   ghc-options:       -Wall -O2
   other-modules:     CmdArgs,
                      Leu.HttpRequest,
