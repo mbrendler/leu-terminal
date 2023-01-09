@@ -14,7 +14,8 @@ module Leu.Types (
 
 import System.IO (stdout)
 import System.Console.ANSI (hSupportsANSI)
-import TermSize (getTermSize)
+import System.Console.Terminal.Size (size, Window(..))
+import Data.Maybe (fromMaybe)
 
 import Text.XML.HaXml.Types (Content, Element)
 import Text.XML.HaXml.Html.Pretty (content, element)
@@ -77,9 +78,11 @@ type Width = Int
 type ColorSupport = Bool
 
 data Terminal = Terminal Width ColorSupport
+  deriving Show
 
 buildTerminal :: IO Terminal
 buildTerminal = do
-  (_, width) <- getTermSize (Just (25, 80))
+  maybeWindow <- size
+  let window = fromMaybe (Window {height=25, width=80}) maybeWindow
   colorSupport <- hSupportsANSI stdout
-  return $ Terminal width colorSupport
+  return $ Terminal (width window) colorSupport

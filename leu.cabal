@@ -10,7 +10,6 @@ tested-with:         GHC==8.2
 
 Executable leu
   Main-is:           leu.hs
-  Other-Modules:     TermSize
   Build-Depends:     base >= 3 && < 5,
                      HaXml == 1.25.12,
                      http-conduit == 2.3.7,
@@ -19,6 +18,7 @@ Executable leu
                      utf8-string == 1.0.1.1,
                      parseargs == 0.2.0.9,
                      MissingH == 1.5.0.1,
+                     terminal-size == 0.3.3
   ghc-options:       -Wall -O2
   other-modules:     CmdArgs,
                      Leu.HttpRequest,
