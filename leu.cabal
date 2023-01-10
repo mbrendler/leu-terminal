@@ -12,10 +12,10 @@ Executable leu
   Main-is:           leu.hs
   Build-Depends:     base >= 3 && < 5,
                      HaXml == 1.25.12,
-                     http-conduit == 2.3.7,
+                     http-conduit == 2.3.8,
                      bytestring == 0.11.3.1,
-                     ansi-terminal == 0.9,
-                     utf8-string == 1.0.1.1,
+                     ansi-terminal == 0.11.4,
+                     utf8-string == 1.0.2,
                      parseargs == 0.2.0.9,
                      MissingH == 1.5.0.1,
                      terminal-size == 0.3.3
