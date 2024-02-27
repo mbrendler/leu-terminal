@@ -17,7 +17,6 @@ Executable leu
                      ansi-terminal == 0.11.4,
                      utf8-string == 1.0.2,
                      parseargs == 0.2.0.9,
-                     MissingH == 1.5.0.1,
                      terminal-size == 0.3.3
   ghc-options:       -Wall -O2
   other-modules:     CmdArgs,
