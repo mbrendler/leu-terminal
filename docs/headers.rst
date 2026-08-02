@@ -11,6 +11,10 @@ HTTP-Header
    tatsächlich gesendeten Header stehen in ``src/http.c`` (und unverändert in
    der alten Haskell-Fassung in ``Leu/HttpRequest.hs``).
 
+   Header allein genügen ebenfalls nicht: die Anfrage muss über **HTTP/1.1**
+   laufen.  Mit dem von libcurl standardmäßig ausgehandelten HTTP/2 antwortet
+   Cloudflare der SecureTransport-libcurl von macOS immer mit ``403``.
+
 Die folgenden Header wurden durch eine Anfrage nach **query.xml** von einem
 Chrome auf OS X aufgezeichnet::
 

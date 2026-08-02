@@ -11,7 +11,11 @@
  * like a browser with '403 Forbidden'.  A plausible user-agent alone is not
  * enough, the modern browser headers below are needed as well.  Only 'gzip' is
  * accepted as content encoding - CURLOPT_ACCEPT_ENCODING makes libcurl send
- * the header and decompress the answer; 'br' would not be handled. */
+ * the header and decompress the answer; 'br' would not be handled.
+ *
+ * The request must be HTTP/1.1 as well.  libcurl negotiates HTTP/2 by default,
+ * and Cloudflare rejects the resulting fingerprint of Apple's SecureTransport
+ * libcurl with '403 Forbidden' no matter which headers are sent. */
 static const char *const browser_headers[] = {
     ("User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like "
      "Gecko) Chrome/126.0.0.0 Safari/537.36"),
@@ -59,6 +63,7 @@ char *http_query(const char *search, const lang_t *lang)
     sb_t body = {0};
     curl_easy_setopt(curl, CURLOPT_URL, sb_str(&url));
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    curl_easy_setopt(curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
     curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, collect);
