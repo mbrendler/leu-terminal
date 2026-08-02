@@ -1,6 +1,15 @@
 HTTP-Header
 ===========
 
+.. note::
+
+   Die hier aufgezeichneten Header von 2013 sind veraltet.  dict.leo.org liegt
+   inzwischen hinter Cloudflare und beantwortet Anfragen, die nicht nach einem
+   Browser aussehen, mit ``403 Forbidden`` (``cf-mitigated: challenge``).  Ein
+   ``User-Agent`` allein genügt nicht, zusätzlich wird mindestens eine Gruppe
+   moderner Browser-Header (``Sec-Fetch-*`` oder ``sec-ch-ua*``) benötigt.  Die
+   tatsächlich gesendeten Header stehen in ``Leu/HttpRequest.hs``.
+
 Die folgenden Header wurden durch eine Anfrage nach **query.xml** von einem
 Chrome auf OS X aufgezeichnet::
 

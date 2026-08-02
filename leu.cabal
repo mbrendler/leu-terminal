@@ -6,7 +6,7 @@ Author:              Maik Brendler
 Maintainer:          TODO
 Build-Type:          Simple
 Cabal-Version:       >=2.0
-tested-with:         GHC==8.2
+tested-with:         GHC==9.6
 
 Executable leu
   Main-is:           leu.hs
