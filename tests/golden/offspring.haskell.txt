@@ -1,0 +1,17 @@
+use language: EnDe: English    - German
+de: 
+en: 
+Direct: Substantive
+   ability of a dam to rear  offspring -- das Aufzuchtverm�gen
+                                [med.] --
+                     offspring  [med.] -- die Progenie
+                    offspring  [biol.] -- die Nachkommenschaft
+                    offspring  [biol.] -- die Brut
+                    offspring  [biol.] -- der Abk�mmling
+                             offspring -- der Spr�ssling
+                             offspring -- der Nachwuchs
+                             offspring -- die Nachkommen  Pl.
+                             offspring -- der Nachkomme
+                             offspring -- der Leibeserbe
+                             offspring -- das Junge
+

@@ -1,0 +1,21 @@
+use language: EnDe: English    - German
+de: cello - chelo - hallo - hell - helle - helot
+en: cello - hallo - hell - helot - hullo - jello - shell
+Direct: Beispiele
+Say  hello   to   your   father   from -- Gr��en  Sie  Ihren  Vater   von   mir
+                                  me . -- .
+
+Direct: Verben
+           to   exchange   hellos    | -- sich Akk.   begr��en
+                exchanged, exchanged | --
+
+Direct: Wendungen/Ausdr�cke
+     Hello !  rarely:   Hallo ,  Hullo -- Moin!  ( Norddt. )
+     Hello !  rarely:   Hallo ,  Hullo -- Moin, Moin!  ( Norddt. )
+                                 hello -- hallo
+     Hello !  rarely:   Hallo ,  Hullo -- Hallo!
+
+Direct: Substantive
+                      initial   hellos -- erste  Begr��ung
+         hello   rarely:  hallo, hullo -- das Hallo  Pl.:  die Hallos
+

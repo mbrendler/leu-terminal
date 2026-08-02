@@ -8,7 +8,8 @@ HTTP-Header
    Browser aussehen, mit ``403 Forbidden`` (``cf-mitigated: challenge``).  Ein
    ``User-Agent`` allein genügt nicht, zusätzlich wird mindestens eine Gruppe
    moderner Browser-Header (``Sec-Fetch-*`` oder ``sec-ch-ua*``) benötigt.  Die
-   tatsächlich gesendeten Header stehen in ``Leu/HttpRequest.hs``.
+   tatsächlich gesendeten Header stehen in ``src/http.c`` (und unverändert in
+   der alten Haskell-Fassung in ``Leu/HttpRequest.hs``).
 
 Die folgenden Header wurden durch eine Anfrage nach **query.xml** von einem
 Chrome auf OS X aufgezeichnet::

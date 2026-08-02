@@ -1,13 +1,12 @@
 FROM debian:stable-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ghc cabal-install zlib1g-dev g++ ca-certificates \
+    gcc libc6-dev libcurl4-openssl-dev libxml2-dev pkg-config ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY . /app
-RUN cabal update \
-    && cabal install --installdir=/out --install-method=copy --overwrite-policy=always
+RUN ./build.sh && mkdir -p /out && cp build/leu /out/leu
 
 # build + extract:
 #   podman build -t leu-build .
