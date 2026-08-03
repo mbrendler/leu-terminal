@@ -21,7 +21,8 @@ typedef struct {
  * reference would glue those words together, and leaving it alone would make
  * libxml2 substitute it into the text.  So a reference in content becomes an
  * empty <leuref/> element, which renders as nothing yet keeps its neighbours
- * apart; inside a tag, where an element cannot go, it is dropped.
+ * apart.  Attribute values are copied verbatim - an element cannot go there,
+ * and libxml2 decodes their references as usual.
  *
  * This is the one place to change if references should ever be rendered. */
 char *mark_refs(const char *doc);

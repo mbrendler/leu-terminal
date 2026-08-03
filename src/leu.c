@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <libxml/parser.h>
+
 #include "http.h"
 #include "parse.h"
 #include "render.h"
@@ -36,6 +38,10 @@ static char *read_file(const char *path)
     size_t n;
     while ((n = fread(buf, 1, sizeof buf, f)) > 0)
         sb_addn(&body, buf, n);
+    if (ferror(f)) {
+        fprintf(stderr, "leu: %s: read error\n", path);
+        exit(1);
+    }
     fclose(f);
 
     return body.s ? body.s : xstrdup("");
@@ -61,6 +67,8 @@ static const char *program_name(const char *argv0)
 
 int main(int argc, char **argv)
 {
+    LIBXML_TEST_VERSION
+
     enum { OPT_SHOW_LANGUAGES = 1000 };
     static const struct option long_options[] = {
         { .name = "file",              .has_arg = required_argument, .val = 'f' },

@@ -65,6 +65,17 @@ char *mark_refs(const char *doc)
             sb_addc(&out, *in++);
             continue;
         }
+        if (in_tag && (*in == '"' || *in == '\'')) {
+            /* An attribute value is copied verbatim: a '>' inside it must not
+             * end the tag, and libxml2 decodes its references just fine. */
+            char quote = *in;
+            sb_addc(&out, *in++);
+            while (*in != '\0' && *in != quote)
+                sb_addc(&out, *in++);
+            if (*in == quote)
+                sb_addc(&out, *in++);
+            continue;
+        }
         if (*in != '&') {
             sb_addc(&out, *in++);
             continue;

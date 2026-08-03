@@ -45,7 +45,8 @@ static size_t collect(char *data, size_t size, size_t nmemb, void *userdata)
 
 char *http_query(const char *search, const lang_t *lang)
 {
-    curl_global_init(CURL_GLOBAL_DEFAULT);
+    if (curl_global_init(CURL_GLOBAL_DEFAULT) != CURLE_OK)
+        fail("could not initialise libcurl");
     CURL *curl = curl_easy_init();
     if (curl == nullptr)
         fail("could not initialise libcurl");
@@ -65,6 +66,8 @@ char *http_query(const char *search, const lang_t *lang)
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
     curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
+    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, collect);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &body);

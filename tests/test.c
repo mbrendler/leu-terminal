@@ -128,7 +128,13 @@ static void test_mark_refs(void)
     check("marks: named reference", "a<leuref/>b", mark_refs("a&amp;b"));
     check("marks: adjacent references", "a<leuref/><leuref/>b",
           mark_refs("a&#160;&#160;b"));
-    check("marks: dropped inside a tag", "<x t=\"ab\"/>", mark_refs("<x t=\"a&amp;b\"/>"));
+    check("marks: kept inside a double quoted attribute", "<x t=\"a&amp;b\"/>",
+          mark_refs("<x t=\"a&amp;b\"/>"));
+    check("marks: kept inside a single quoted attribute", "<x t='a&amp;b'/>",
+          mark_refs("<x t='a&amp;b'/>"));
+    check("marks: '>' in an attribute does not end the tag",
+          "<x t=\"a>b\"><leuref/></x>", mark_refs("<x t=\"a>b\">&#160;</x>"));
+    check("marks: an unterminated attribute survives", "<x t=\"a", mark_refs("<x t=\"a"));
     check("marks: a bare ampersand survives", "a & b", mark_refs("a & b"));
     check("marks: an unterminated reference survives", "a&foo", mark_refs("a&foo"));
     check("marks: an empty reference survives", "&;", mark_refs("&;"));
@@ -176,6 +182,10 @@ static void test_parse(void)
         "</section></sectionlist></xml>");
     check_size("one section is one part", 1, sections.n);
     check("the section title", "Verben", sections.v[0].title);
+
+    partlist_t titled = parse_string(
+        "<xml><sectionlist><section sctTitle=\"A&amp;B\"/></sectionlist></xml>");
+    check("a reference in a title is decoded", "A&B", titled.v[0].title);
     check_size("minprio is not an entry", 1, sections.v[0].nentries);
     check_size("a sectionlist is direct", DIRECT, (size_t)sections.v[0].direct);
 
